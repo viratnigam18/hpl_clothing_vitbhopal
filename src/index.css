@@ -1,0 +1,294 @@
+@import "tailwindcss";
+
+/* ============================================================
+   HPL CLOTHING — DESIGN SYSTEM
+   ============================================================ */
+
+/* --- Custom Theme (Tailwind v4 @theme) --- */
+@theme {
+  /* Background palette */
+  --color-bg: #0a0a0a;
+  --color-bg-card: #141311;
+  --color-bg-elevated: #1a1a18;
+  --color-bg-glass: rgba(20, 19, 17, 0.85);
+
+  /* Gold palette */
+  --color-gold: #d4af37;
+  --color-gold-bright: #f3d878;
+  --color-gold-dim: #8a6f22;
+  --color-gold-glow: rgba(212, 175, 55, 0.3);
+
+  /* Text */
+  --color-text-primary: #f5f0e8;
+  --color-text-secondary: #a09882;
+  --color-text-muted: #6b6352;
+
+  /* Team colors */
+  --color-team-kabini-lynx: #8E44AD;
+  --color-team-ken-cheetahs: #E67E22;
+  --color-team-shimsha-panthers: #2C3E50;
+  --color-team-tons-tigers: #F39C12;
+  --color-team-orsang-leopards: #C0392B;
+  --color-team-arkavati-lions: #2980B9;
+  --color-team-harangi-jaguars: #27AE60;
+
+  /* Fonts */
+  --font-heading: "Anton", sans-serif;
+  --font-body: "Inter", sans-serif;
+
+  /* Spacing scale */
+  --spacing-section: 6rem;
+  --spacing-section-mobile: 3.5rem;
+
+  /* Border radius */
+  --radius-card: 0.75rem;
+  --radius-badge: 9999px;
+  --radius-button: 0.5rem;
+
+  /* Shadows */
+  --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.4);
+  --shadow-card-hover: 0 12px 40px rgba(0, 0, 0, 0.6);
+  --shadow-gold: 0 0 20px rgba(212, 175, 55, 0.2);
+
+  /* Z-indices */
+  --z-navbar: 100;
+  --z-drawer: 200;
+  --z-modal: 300;
+
+  /* Transitions */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* --- Base Reset & Defaults --- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  background-color: var(--color-bg);
+  color: var(--color-text-primary);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: 400; /* Anton is already bold by design */
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  line-height: 1.1;
+}
+
+a {
+  color: var(--color-gold);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+a:hover {
+  color: var(--color-gold-bright);
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+button {
+  cursor: pointer;
+  font-family: var(--font-body);
+}
+
+/* --- Scrollbar Styling --- */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-gold-dim);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-gold);
+}
+
+/* ============================================================
+   GOLD SHINE SWEEP — Hero crest shimmer
+   ============================================================ */
+@keyframes gold-shine-sweep {
+  0% {
+    transform: translateX(-100%) skewX(-15deg);
+  }
+  100% {
+    transform: translateX(200%) skewX(-15deg);
+  }
+}
+
+.gold-shine {
+  position: relative;
+  overflow: hidden;
+}
+.gold-shine::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(243, 216, 120, 0.15) 30%,
+    rgba(243, 216, 120, 0.4) 50%,
+    rgba(243, 216, 120, 0.15) 70%,
+    transparent 100%
+  );
+  animation: gold-shine-sweep 3s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* ============================================================
+   GLOW RING — Team badge hover
+   ============================================================ */
+.glow-ring {
+  transition: box-shadow 0.3s var(--ease-out-expo);
+}
+.glow-ring:hover {
+  box-shadow: 0 0 25px var(--glow-color, var(--color-gold-glow)),
+              0 0 50px var(--glow-color, var(--color-gold-glow));
+}
+
+/* ============================================================
+   CARD TILT — 3D perspective on product cards
+   ============================================================ */
+.card-tilt-wrapper {
+  perspective: 800px;
+}
+.card-tilt {
+  transition: transform 0.15s ease-out, box-shadow 0.3s ease;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+.card-tilt:hover {
+  box-shadow: var(--shadow-card-hover);
+}
+
+/* ============================================================
+   JERSEY RACK — 3D perspective container
+   ============================================================ */
+.rack-viewport {
+  perspective: 1200px;
+  perspective-origin: 50% 50%;
+  overflow: hidden;
+}
+.rack-ring {
+  transform-style: preserve-3d;
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+.rack-item {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+}
+
+/* Gold rim light for the rack */
+.rack-rim-light {
+  background: radial-gradient(
+    ellipse 80% 8% at 50% 70%,
+    rgba(212, 175, 55, 0.12) 0%,
+    transparent 100%
+  );
+  pointer-events: none;
+}
+
+/* ============================================================
+   GLASS MORPHISM — Navbar, drawers
+   ============================================================ */
+.glass-dark {
+  background: var(--color-bg-glass);
+  backdrop-filter: blur(16px) saturate(1.2);
+  -webkit-backdrop-filter: blur(16px) saturate(1.2);
+  border-bottom: 1px solid rgba(212, 175, 55, 0.08);
+}
+
+/* ============================================================
+   FOCUS STATES — Visible keyboard focus
+   ============================================================ */
+*:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* ============================================================
+   UTILITY CLASSES
+   ============================================================ */
+.text-gradient-gold {
+  background: linear-gradient(135deg, var(--color-gold-dim), var(--color-gold), var(--color-gold-bright));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.bg-gradient-dark {
+  background: linear-gradient(180deg, var(--color-bg) 0%, var(--color-bg-card) 100%);
+}
+
+.border-gold-subtle {
+  border: 1px solid rgba(212, 175, 55, 0.12);
+}
+
+/* Container */
+.container-hpl {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .container-hpl {
+    padding: 0 2rem;
+  }
+}
+
+/* ============================================================
+   REDUCED MOTION — Respect user preferences
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  .gold-shine::after {
+    animation: none;
+  }
+  
+  .card-tilt {
+    transition: none !important;
+  }
+  
+  * {
+    animation-duration: 0.001s !important;
+    transition-duration: 0.1s !important;
+  }
+}
+
+/* ============================================================
+   RESPONSIVE HELPERS
+   ============================================================ */
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}

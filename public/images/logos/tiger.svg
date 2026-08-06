@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 240" fill="none">
+  <defs>
+    <radialGradient id="bg-tg" cx="50%" cy="40%" r="60%">
+      <stop offset="0%" stop-color="#FBBF24"/>
+      <stop offset="100%" stop-color="#F39C12"/>
+    </radialGradient>
+  </defs>
+  <path d="M100 10 L180 50 L175 150 Q170 200 100 230 Q30 200 25 150 L20 50 Z" fill="url(#bg-tg)" stroke="#FDE68A" stroke-width="3"/>
+  <line x1="60" y1="55" x2="55" y2="90" stroke="#92400E" stroke-width="5" stroke-linecap="round" opacity="0.4"/>
+  <line x1="80" y1="50" x2="75" y2="95" stroke="#92400E" stroke-width="5" stroke-linecap="round" opacity="0.4"/>
+  <line x1="120" y1="50" x2="125" y2="95" stroke="#92400E" stroke-width="5" stroke-linecap="round" opacity="0.4"/>
+  <line x1="140" y1="55" x2="145" y2="90" stroke="#92400E" stroke-width="5" stroke-linecap="round" opacity="0.4"/>
+  <text x="100" y="120" text-anchor="middle" font-family="Arial Black, sans-serif" font-size="20" font-weight="900" fill="#fff" letter-spacing="2">TONS</text>
+  <text x="100" y="152" text-anchor="middle" font-family="Arial Black, sans-serif" font-size="18" font-weight="700" fill="#fff" letter-spacing="3">TIGERS</text>
+  <circle cx="100" cy="190" r="12" fill="none" stroke="#FDE68A" stroke-width="2" opacity="0.5"/>
+  <text x="100" y="196" text-anchor="middle" font-family="Arial" font-size="12" font-weight="700" fill="#FDE68A">TT</text>
+</svg>
