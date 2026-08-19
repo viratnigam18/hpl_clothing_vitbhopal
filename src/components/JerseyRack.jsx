@@ -217,52 +217,71 @@ export default function JerseyRack({ products = [], onProductClick }) {
         </motion.div>
       </div>
 
-      {/* Arrow buttons (visible on mobile, subtle on desktop) */}
-      <div className="flex items-center justify-center gap-6 mt-4">
+      {/* Arrow buttons + info + Buy Now */}
+      <div className="flex items-center justify-center gap-4 mt-6">
         <button
-          className="w-10 h-10 rounded-full border border-white/10 text-text-secondary hover:text-gold hover:border-gold/30 transition-colors flex items-center justify-center"
+          className="w-10 h-10 rounded-full border border-white/10 text-text-secondary hover:text-gold hover:border-gold/30 transition-colors flex items-center justify-center flex-shrink-0"
           onClick={() => {
             const current = rawAngle.get();
             rawAngle.set(Math.round(current / angleStep) * angleStep - angleStep);
           }}
-          aria-label="Previous product"
+          aria-label="Previous jersey"
         >
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <polyline points="15 18 9 12 15 6" />
           </svg>
         </button>
 
-        {/* Info label */}
+        {/* Info + Buy Now card */}
         <AnimatePresence mode="wait">
           {products[centeredIndex] && (
             <motion.div
               key={centeredIndex}
-              className="text-center min-w-[200px]"
-              initial={{ opacity: 0, y: 5 }}
+              className="text-center"
+              initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -5 }}
+              exit={{ opacity: 0, y: -8 }}
               transition={{ duration: 0.2 }}
             >
-              <p className="text-text-muted text-xs uppercase tracking-wider">
+              <p className="text-text-muted text-xs uppercase tracking-wider mb-0.5">
                 {products[centeredIndex].team?.name || 'HPL'}
               </p>
-              <p className="text-text-primary font-semibold text-sm mt-0.5">
+              <p className="text-text-primary font-semibold text-sm mb-1">
                 {products[centeredIndex].name}
               </p>
-              <p className="text-gold font-bold text-lg mt-0.5">
+              <p className="text-gold font-bold text-xl mb-3">
                 {formatPrice(products[centeredIndex].price)}
               </p>
+              <div className="flex items-center gap-2 justify-center">
+                <a
+                  href={`https://forms.gle/LnowDts9HkYSLohg7?entry.product=${encodeURIComponent(products[centeredIndex].name)}&entry.team=${encodeURIComponent(products[centeredIndex].team?.name || 'HPL')}&entry.price=${encodeURIComponent(formatPrice(products[centeredIndex].price))}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg font-bold text-sm uppercase tracking-wider hover:brightness-110 transition-all duration-200 no-underline"
+                  style={{ backgroundColor: '#d4af37', color: '#ffffff' }}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  Buy Now
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </a>
+                <button
+                  className="px-4 py-2.5 rounded-lg border border-white/10 text-text-secondary hover:text-gold hover:border-gold/20 text-sm font-medium transition-colors"
+                  onClick={() => navigate(`/products/${products[centeredIndex].slug}`)}
+                >
+                  Details
+                </button>
+              </div>
             </motion.div>
           )}
         </AnimatePresence>
 
         <button
-          className="w-10 h-10 rounded-full border border-white/10 text-text-secondary hover:text-gold hover:border-gold/30 transition-colors flex items-center justify-center"
+          className="w-10 h-10 rounded-full border border-white/10 text-text-secondary hover:text-gold hover:border-gold/30 transition-colors flex items-center justify-center flex-shrink-0"
           onClick={() => {
             const current = rawAngle.get();
             rawAngle.set(Math.round(current / angleStep) * angleStep + angleStep);
           }}
-          aria-label="Next product"
+          aria-label="Next jersey"
         >
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <polyline points="9 18 15 12 9 6" />

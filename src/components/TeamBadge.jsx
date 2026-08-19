@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 
 /**
- * TeamBadge — circular crest with team-color glow on hover.
+ * TeamBadge — rounded-rectangle crest with team-color glow on hover.
  * Click navigates to the team page.
  */
 export default function TeamBadge({ team, size = 'md' }) {
@@ -11,9 +11,9 @@ export default function TeamBadge({ team, size = 'md' }) {
   const navigate = useNavigate();
 
   const sizes = {
-    sm: 'w-14 h-14 text-xs',
-    md: 'w-20 h-20 text-sm',
-    lg: 'w-28 h-28 text-base',
+    sm: 'w-16 h-12 text-xs',
+    md: 'w-24 h-16 text-sm',
+    lg: 'w-32 h-24 text-base',
   };
 
   // Generate initials from team name (e.g., "Kabini Lynx" → "KL")
@@ -27,9 +27,10 @@ export default function TeamBadge({ team, size = 'md' }) {
     <motion.button
       className={`
         ${sizes[size]}
-        relative rounded-full flex items-center justify-center
+        relative rounded-xl flex items-center justify-center
         font-heading uppercase tracking-wider
         border-2 border-white/10
+        overflow-hidden
         transition-colors duration-300
         glow-ring cursor-pointer
         focus-visible:outline-2 focus-visible:outline-gold focus-visible:outline-offset-2
@@ -43,7 +44,7 @@ export default function TeamBadge({ team, size = 'md' }) {
         prefersReduced
           ? { borderColor: team.color_hex }
           : {
-              scale: 1.1,
+              scale: 1.08,
               borderColor: team.color_hex,
               boxShadow: `0 0 30px ${team.color_hex}44, 0 0 60px ${team.color_hex}22`,
             }
@@ -57,7 +58,7 @@ export default function TeamBadge({ team, size = 'md' }) {
         <img
           src={team.crest_url}
           alt={team.name}
-          className="w-3/4 h-3/4 object-contain"
+          className="w-full h-full object-cover"
           loading="lazy"
         />
       ) : (

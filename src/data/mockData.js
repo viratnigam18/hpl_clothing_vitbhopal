@@ -3,14 +3,15 @@
    ============================================================ */
 
 export const TEAMS = [
-  { id: '1', name: 'Kabini Lynx', slug: 'kabini-lynx', color_hex: '#8E44AD', crest_url: null, sort_order: 1 },
-  { id: '2', name: 'Ken Cheetahs', slug: 'ken-cheetahs', color_hex: '#E67E22', crest_url: null, sort_order: 2 },
-  { id: '3', name: 'Shimsha Panthers', slug: 'shimsha-panthers', color_hex: '#2C3E50', crest_url: null, sort_order: 3 },
-  { id: '4', name: 'Tons Tigers', slug: 'tons-tigers', color_hex: '#F39C12', crest_url: null, sort_order: 4 },
-  { id: '5', name: 'Orsang Leopards', slug: 'orsang-leopards', color_hex: '#C0392B', crest_url: null, sort_order: 5 },
-  { id: '6', name: 'Arkavati Lions', slug: 'arkavati-lions', color_hex: '#2980B9', crest_url: null, sort_order: 6 },
-  { id: '7', name: 'Harangi Jaguars', slug: 'harangi-jaguars', color_hex: '#27AE60', crest_url: null, sort_order: 7 },
+  { id: '1', name: 'Kabini Lynx',     slug: 'kabini-lynx',     color_hex: '#8E44AD', crest_url: '/images/logos/lynx.png',     sort_order: 1 },
+  { id: '2', name: 'Ken Cheetahs',    slug: 'ken-cheetahs',    color_hex: '#E67E22', crest_url: '/images/logos/cheetahs.png', sort_order: 2 },
+  { id: '3', name: 'Shimsha Panthers',slug: 'shimsha-panthers',color_hex: '#2C3E50', crest_url: '/images/logos/panthers.png', sort_order: 3 },
+  { id: '4', name: 'Tons Tigers',     slug: 'tons-tigers',     color_hex: '#F39C12', crest_url: '/images/logos/tiger.png',    sort_order: 4 },
+  { id: '5', name: 'Orsang Leopards', slug: 'orsang-leopards', color_hex: '#C0392B', crest_url: '/images/logos/leopards.png', sort_order: 5 },
+  { id: '6', name: 'Arkavati Lions',  slug: 'arkavati-lions',  color_hex: '#2980B9', crest_url: '/images/logos/lions.png',    sort_order: 6 },
+  { id: '7', name: 'Harangi Jaguars', slug: 'harangi-jaguars', color_hex: '#27AE60', crest_url: '/images/logos/jaguars.png',  sort_order: 7 },
 ];
+
 
 const PRODUCT_TYPES = ['jersey'];
 const SIZES = ['S', 'M', 'L', 'XL', 'XXL', '2XL', '3XL'];

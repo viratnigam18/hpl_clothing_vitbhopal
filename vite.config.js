@@ -14,7 +14,6 @@ export default defineConfig({
       ignored: [
         '**/images for logos/**',
         '**/add_later/**',
-        '**/public/images/**',
       ],
     },
   },

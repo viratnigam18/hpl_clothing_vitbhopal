@@ -50,11 +50,11 @@ export default function TeamPage() {
         <div className="relative z-10 flex flex-col items-center text-center">
           {/* Team badge — glow-in on load */}
           <motion.div
-            className="w-28 h-28 sm:w-36 sm:h-36 rounded-full border-2 flex items-center justify-center mb-6"
+            className="w-48 sm:w-60 rounded-2xl overflow-hidden border-2 flex items-center justify-center mb-6"
             style={{
-              borderColor: `${teamColor}40`,
+              borderColor: `${teamColor}50`,
               backgroundColor: `${teamColor}10`,
-              boxShadow: `0 0 40px ${teamColor}20, 0 0 80px ${teamColor}10`,
+              boxShadow: `0 0 40px ${teamColor}25, 0 0 80px ${teamColor}10`,
             }}
             initial={{ opacity: 0, scale: 0.7 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -64,11 +64,11 @@ export default function TeamPage() {
               <img
                 src={team.crest_url}
                 alt={team.name}
-                className="w-3/4 h-3/4 object-contain"
+                className="w-full h-full object-cover"
               />
             ) : (
               <span
-                className="font-heading text-3xl sm:text-4xl"
+                className="font-heading text-3xl sm:text-4xl py-8"
                 style={{ color: teamColor }}
               >
                 {team?.name
