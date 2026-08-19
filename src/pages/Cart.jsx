@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useCartStore, selectTotalAmount } from '@/store/cartStore';
 import { formatPrice } from '@/data/mockData';
-import { openRazorpayCheckout } from '@/lib/razorpay';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 import MagneticButton from '@/components/MagneticButton';
 import SectionReveal from '@/components/SectionReveal';
@@ -37,79 +36,23 @@ export default function Cart() {
     formData.roomNo.trim() &&
     formData.phone.trim().length >= 10;
 
-  const handlePayment = async () => {
+  // TODO: Replace GOOGLE_FORM_URL with your actual Google Form link when ready
+  const GOOGLE_FORM_URL = 'https://forms.google.com/REPLACE_WITH_YOUR_FORM_LINK';
+
+  const handlePayment = () => {
     if (!isFormValid) return;
-    setProcessing(true);
-    setError('');
-
-    try {
-      if (!isSupabaseConfigured) {
-        // Demo mode — simulate payment flow
-        const fakeOrderNumber = `HPL-${Date.now().toString(36).toUpperCase()}`;
-        clearCart();
-        navigate(`/order/${fakeOrderNumber}`);
-        return;
-      }
-
-      // 1. Call Edge Function to create Razorpay order
-      const { data, error: fnError } = await supabase.functions.invoke(
-        'create-razorpay-order',
-        {
-          body: {
-            items: items.map((i) => ({
-              variantId: i.variantId,
-              qty: i.qty,
-            })),
-            buyerName: formData.buyerName,
-            hostelBlock: formData.hostelBlock,
-            roomNo: formData.roomNo,
-            phone: formData.phone,
-            email: formData.email || undefined,
-          },
-        }
-      );
-
-      if (fnError) throw new Error(fnError.message);
-
-      // 2. Open Razorpay Checkout
-      openRazorpayCheckout({
-        orderId: data.razorpayOrderId,
-        amount: data.amount,
-        buyerName: formData.buyerName,
-        phone: formData.phone,
-        email: formData.email,
-        onSuccess: async ({ razorpayPaymentId, razorpayOrderId, razorpaySignature }) => {
-          // 3. Verify payment server-side
-          const { error: verifyError } = await supabase.functions.invoke(
-            'verify-razorpay-payment',
-            {
-              body: {
-                razorpayOrderId,
-                razorpayPaymentId,
-                razorpaySignature,
-              },
-            }
-          );
-
-          if (verifyError) {
-            setError('Payment verification failed. Please contact support.');
-            setProcessing(false);
-            return;
-          }
-
-          clearCart();
-          navigate(`/order/${data.orderNumber}`);
-        },
-        onFailure: (msg) => {
-          setError(msg || 'Payment was cancelled');
-          setProcessing(false);
-        },
-      });
-    } catch (err) {
-      console.error('Payment error:', err);
-      setError(err.message || 'Something went wrong');
-      setProcessing(false);
-    }
+    // Build a prefilled query string so cart details carry over to the form
+    const params = new URLSearchParams({
+      'entry.name': formData.buyerName,
+      'entry.block': formData.hostelBlock,
+      'entry.room': formData.roomNo,
+      'entry.phone': formData.phone,
+      'entry.email': formData.email,
+      'entry.items': items.map((i) => `${i.name} (${i.size}) x${i.qty}`).join(', '),
+      'entry.total': formatPrice(totalAmount),
+    });
+    // Open the Google Form in a new tab
+    window.open(`${GOOGLE_FORM_URL}?${params.toString()}`, '_blank');
   };
 
   if (items.length === 0 && phase === 'cart') {
@@ -325,17 +268,14 @@ export default function Cart() {
                     variant="primary"
                     className="w-full mt-4"
                     onClick={handlePayment}
-                    disabled={!isFormValid || processing}
+                    disabled={!isFormValid}
                     id="pay-now-btn"
                   >
-                    {processing
-                      ? 'Processing...'
-                      : `Pay ${formatPrice(totalAmount)}`
-                    }
+                    Place Order via Google Form →
                   </MagneticButton>
 
                   <p className="text-text-muted text-xs text-center">
-                    UPI · Cards · Netbanking · Wallets
+                    You'll be redirected to our Google Form to complete your order.
                   </p>
                 </div>
 

@@ -36,12 +36,12 @@ export default function Navbar({ onCartClick }) {
             className="flex items-center gap-2 no-underline"
             id="nav-logo"
           >
-            <span className="text-gold font-heading text-2xl tracking-wider">
-              HPL
-            </span>
-            <span className="text-text-muted text-xs font-body uppercase tracking-widest hidden sm:block">
-              Clothing
-            </span>
+            <img
+              src="/images/hpl_logo.png"
+              alt="HPL Logo"
+              className="h-10 w-auto object-contain"
+              style={{ maxWidth: 120 }}
+            />
           </Link>
 
           {/* Desktop nav links */}
