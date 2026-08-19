@@ -8,4 +8,10 @@ export default defineConfig({
       '@': import.meta.dirname + '/src',
     },
   },
+  server: {
+    watch: {
+      // Exclude the raw source asset folders — Windows can lock these files
+      ignored: ['**/images for logos/**', '**/add_later/**'],
+    },
+  },
 })

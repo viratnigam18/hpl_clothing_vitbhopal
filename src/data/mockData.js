@@ -12,15 +12,12 @@ export const TEAMS = [
   { id: '7', name: 'Harangi Jaguars', slug: 'harangi-jaguars', color_hex: '#27AE60', crest_url: null, sort_order: 7 },
 ];
 
-const PRODUCT_TYPES = ['jersey', 'hoodie', 'tee', 'cap'];
+const PRODUCT_TYPES = ['jersey'];
 const SIZES = ['S', 'M', 'L', 'XL', 'XXL'];
 
-// Price ranges in paise
+// Price in paise
 const PRICES = {
-  jersey: 149900,  // ₹1,499
-  hoodie: 199900,  // ₹1,999
-  tee: 79900,      // ₹799
-  cap: 49900,      // ₹499
+  jersey: 40000,  // ₹400
 };
 
 // Generate placeholder products for each team
@@ -31,8 +28,8 @@ let imageId = 1;
 export const PRODUCTS = TEAMS.flatMap((team) =>
   PRODUCT_TYPES.map((type) => {
     const id = String(productId++);
-    const name = `${team.name} ${type.charAt(0).toUpperCase() + type.slice(1)}`;
-    const slug = `${team.slug}-${type}`;
+    const name = `${team.name} Jersey`;
+    const slug = `${team.slug}-jersey`;
     return {
       id,
       team_id: team.id,
@@ -40,20 +37,38 @@ export const PRODUCTS = TEAMS.flatMap((team) =>
       slug,
       type,
       price: PRICES[type],
-      description: `Official HPL ${team.name} ${type}. Premium quality, designed for comfort and style. Show your team pride on and off the field.`,
-      is_bestseller: type === 'jersey',
-      is_new: type === 'hoodie',
-      team: team, // joined data for convenience
+      description: `Official HPL ${team.name} jersey. Premium quality, designed for comfort and style. Show your team pride on and off the field.`,
+      is_bestseller: true,
+      is_new: false,
+      team: team,
     };
   })
 );
 
-export const PRODUCT_IMAGES = PRODUCTS.map((product) => ({
-  id: String(imageId++),
-  product_id: product.id,
-  url: `https://placehold.co/600x800/${product.team.color_hex.slice(1)}/ffffff?text=${encodeURIComponent(product.name)}`,
-  sort_order: 0,
-}));
+// Real jersey mockup images (one per team)
+const JERSEY_IMAGES = {
+  'kabini-lynx':     '/images/jerseys/kabini-lynx.png',
+  'ken-cheetahs':    '/images/jerseys/ken-cheetahs.png',
+  'shimsha-panthers':'/images/jerseys/shimsha-panthers.png',
+  'tons-tigers':     '/images/jerseys/tons-tigers.png',
+  'orsang-leopards': '/images/jerseys/orsang-leopards.png',
+  'arkavati-lions':  '/images/jerseys/arkavati-lions.png',
+  'harangi-jaguars': '/images/jerseys/harangi-jaguars.png',
+};
+
+export const PRODUCT_IMAGES = PRODUCTS.map((product) => {
+  // Use the real jersey photo for jersey-type products
+  const isJersey = product.type === 'jersey';
+  const url = isJersey
+    ? (JERSEY_IMAGES[product.team.slug] || `https://placehold.co/600x800/${product.team.color_hex.slice(1)}/ffffff?text=${encodeURIComponent(product.name)}`)
+    : `https://placehold.co/600x800/${product.team.color_hex.slice(1)}/ffffff?text=${encodeURIComponent(product.name)}`;
+  return {
+    id: String(imageId++),
+    product_id: product.id,
+    url,
+    sort_order: 0,
+  };
+});
 
 export const PRODUCT_VARIANTS = PRODUCTS.flatMap((product) =>
   SIZES.map((size) => ({

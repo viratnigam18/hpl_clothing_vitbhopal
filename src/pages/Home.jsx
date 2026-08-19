@@ -4,7 +4,6 @@ import { useProducts } from '@/hooks/useProducts';
 import GoldShine from '@/components/GoldShine';
 import ProductCard from '@/components/ProductCard';
 import SectionReveal from '@/components/SectionReveal';
-import CountdownBanner from '@/components/CountdownBanner';
 import MagneticButton from '@/components/MagneticButton';
 
 export default function Home() {
@@ -74,8 +73,6 @@ export default function Home() {
 
 
 
-      {/* ====== COUNTDOWN BANNER ====== */}
-      <CountdownBanner />
 
       {/* ====== BEST SELLERS ====== */}
       {bestsellerProducts.length > 0 && (

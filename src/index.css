@@ -128,10 +128,19 @@ button {
    ============================================================ */
 @keyframes gold-shine-sweep {
   0% {
-    transform: translateX(-100%) skewX(-15deg);
+    transform: translateX(-120%) skewX(-15deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  45% {
+    transform: translateX(220%) skewX(-15deg);
+    opacity: 0;
   }
   100% {
-    transform: translateX(200%) skewX(-15deg);
+    transform: translateX(220%) skewX(-15deg);
+    opacity: 0;
   }
 }
 
@@ -146,12 +155,12 @@ button {
   background: linear-gradient(
     90deg,
     transparent 0%,
-    rgba(243, 216, 120, 0.15) 30%,
-    rgba(243, 216, 120, 0.4) 50%,
-    rgba(243, 216, 120, 0.15) 70%,
+    rgba(243, 216, 120, 0.08) 20%,
+    rgba(243, 216, 120, 0.35) 50%,
+    rgba(243, 216, 120, 0.08) 80%,
     transparent 100%
   );
-  animation: gold-shine-sweep 3s ease-in-out infinite;
+  animation: gold-shine-sweep 6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
   pointer-events: none;
 }
 
