@@ -10,8 +10,12 @@ export default defineConfig({
   },
   server: {
     watch: {
-      // Exclude the raw source asset folders — Windows can lock these files
-      ignored: ['**/images for logos/**', '**/add_later/**'],
+      // Exclude folders Windows may lock — prevents EBUSY crashes
+      ignored: [
+        '**/images for logos/**',
+        '**/add_later/**',
+        '**/public/images/**',
+      ],
     },
   },
 })

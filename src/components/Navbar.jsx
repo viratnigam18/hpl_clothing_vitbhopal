@@ -1,18 +1,16 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useCartStore, selectTotalItems } from '@/store/cartStore';
 import TeamWardrobe from './TeamWardrobe';
 
 /**
- * Navbar — fixed glass-dark nav with HPL logo, nav links, Teams wardrobe trigger, and cart icon.
+ * Navbar — fixed glass-dark nav with HPL logo, nav links, and Teams wardrobe trigger.
  * Mobile hamburger → slide-out drawer.
  */
-export default function Navbar({ onCartClick }) {
+export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [wardrobeOpen, setWardrobeOpen] = useState(false);
   const location = useLocation();
-  const totalItems = useCartStore(selectTotalItems);
 
   const navLinks = [
     { to: '/', label: 'Home' },
@@ -87,69 +85,28 @@ export default function Navbar({ onCartClick }) {
             </button>
           </div>
 
-          {/* Right side: cart + hamburger */}
-          <div className="flex items-center gap-4">
-            {/* Cart button */}
-            <motion.button
-              className="relative p-2 text-text-secondary hover:text-gold transition-colors"
-              onClick={onCartClick}
-              whileTap={{ scale: 0.9 }}
-              aria-label={`Shopping cart, ${totalItems} items`}
-              id="nav-cart"
-            >
-              <svg
-                width="22"
-                height="22"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
-                <line x1="3" y1="6" x2="21" y2="6" />
-                <path d="M16 10a4 4 0 01-8 0" />
-              </svg>
-              <AnimatePresence>
-                {totalItems > 0 && (
-                  <motion.span
-                    key="cart-badge"
-                    className="absolute -top-0.5 -right-0.5 w-5 h-5 bg-gold text-bg text-[10px] font-bold rounded-full flex items-center justify-center"
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    exit={{ scale: 0 }}
-                    transition={{ type: 'spring', stiffness: 500, damping: 20 }}
-                  >
-                    {totalItems > 9 ? '9+' : totalItems}
-                  </motion.span>
-                )}
-              </AnimatePresence>
-            </motion.button>
-
-            {/* Mobile hamburger */}
-            <button
-              className="md:hidden p-2 text-text-secondary hover:text-gold transition-colors"
-              onClick={() => setMobileOpen(!mobileOpen)}
-              aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
-              id="nav-hamburger"
-            >
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                {mobileOpen ? (
-                  <>
-                    <line x1="18" y1="6" x2="6" y2="18" />
-                    <line x1="6" y1="6" x2="18" y2="18" />
-                  </>
-                ) : (
-                  <>
-                    <line x1="3" y1="6" x2="21" y2="6" />
-                    <line x1="3" y1="12" x2="21" y2="12" />
-                    <line x1="3" y1="18" x2="21" y2="18" />
-                  </>
-                )}
-              </svg>
-            </button>
-          </div>
+          {/* Mobile hamburger */}
+          <button
+            className="md:hidden p-2 text-text-secondary hover:text-gold transition-colors"
+            onClick={() => setMobileOpen(!mobileOpen)}
+            aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
+            id="nav-hamburger"
+          >
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              {mobileOpen ? (
+                <>
+                  <line x1="18" y1="6" x2="6" y2="18" />
+                  <line x1="6" y1="6" x2="18" y2="18" />
+                </>
+              ) : (
+                <>
+                  <line x1="3" y1="6" x2="21" y2="6" />
+                  <line x1="3" y1="12" x2="21" y2="12" />
+                  <line x1="3" y1="18" x2="21" y2="18" />
+                </>
+              )}
+            </svg>
+          </button>
         </div>
       </nav>
 

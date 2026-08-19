@@ -1,20 +1,17 @@
-import { useState } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import Navbar from './Navbar';
 import Footer from './Footer';
-import CartDrawer from './CartDrawer';
 
 /**
- * Layout — wraps all pages with Navbar, Footer, CartDrawer, and page transitions.
+ * Layout — wraps all pages with Navbar, Footer, and page transitions.
  */
 export default function Layout() {
-  const [cartOpen, setCartOpen] = useState(false);
   const location = useLocation();
 
   return (
     <div className="min-h-screen flex flex-col bg-bg">
-      <Navbar onCartClick={() => setCartOpen(true)} />
+      <Navbar />
 
       <AnimatePresence mode="wait">
         <motion.main
@@ -30,11 +27,6 @@ export default function Layout() {
       </AnimatePresence>
 
       <Footer />
-
-      <CartDrawer
-        isOpen={cartOpen}
-        onClose={() => setCartOpen(false)}
-      />
     </div>
   );
 }

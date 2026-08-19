@@ -3,7 +3,6 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useProduct } from '@/hooks/useProduct';
 import { useProducts } from '@/hooks/useProducts';
-import { useCartStore } from '@/store/cartStore';
 import { formatPrice } from '@/data/mockData';
 import ImageGallery from '@/components/ImageGallery';
 import SizePicker from '@/components/SizePicker';
@@ -11,14 +10,14 @@ import MagneticButton from '@/components/MagneticButton';
 import ProductCard from '@/components/ProductCard';
 import SectionReveal from '@/components/SectionReveal';
 
+const BUY_NOW_FORM = 'https://forms.gle/LnowDts9HkYSLohg7';
+
 export default function ProductPage() {
   const { slug } = useParams();
   const navigate = useNavigate();
   const { product, loading } = useProduct(slug);
-  const addItem = useCartStore((state) => state.addItem);
 
   const [selectedSize, setSelectedSize] = useState(null);
-  const [addedFeedback, setAddedFeedback] = useState(false);
 
   // Get related products from the same team
   const teamSlug = product?.team?.slug;
@@ -44,24 +43,18 @@ export default function ProductPage() {
   }
 
   const selectedVariant = product.variants?.find((v) => v.size === selectedSize);
-  const canAdd = selectedVariant && selectedVariant.stock_qty > 0;
+  const canBuy = selectedVariant && selectedVariant.stock_qty > 0;
   const teamColor = product.team?.color_hex || '#d4af37';
 
-  const handleAddToCart = () => {
-    if (!canAdd) return;
-
-    addItem({
-      productId: product.id,
-      variantId: selectedVariant.id,
-      name: product.name,
-      size: selectedSize,
-      price: product.price,
-      qty: 1,
-      image: product.images?.[0]?.url || '',
+  const handleBuyNow = () => {
+    if (!canBuy) return;
+    const params = new URLSearchParams({
+      'entry.product': product.name,
+      'entry.size': selectedSize,
+      'entry.price': formatPrice(product.price),
+      'entry.team': product.team?.name || 'HPL',
     });
-
-    setAddedFeedback(true);
-    setTimeout(() => setAddedFeedback(false), 2000);
+    window.open(`${BUY_NOW_FORM}?${params.toString()}`, '_blank');
   };
 
   return (
@@ -151,35 +144,36 @@ export default function ProductPage() {
               />
               {!selectedSize && (
                 <p className="text-text-muted text-xs mt-2">
-                  Please select a size
+                  Please select a size to continue
                 </p>
               )}
             </div>
 
-            {/* Add to Cart */}
-            <div className="mt-auto">
+            {/* Buy Now */}
+            <div className="mt-auto flex flex-col gap-3">
               <MagneticButton
                 variant="primary"
                 className="w-full sm:w-auto"
-                onClick={handleAddToCart}
-                disabled={!canAdd}
-                id="product-add-to-cart"
+                onClick={handleBuyNow}
+                disabled={!canBuy}
+                id="product-buy-now"
               >
-                {addedFeedback
-                  ? '✓ Added to Cart'
-                  : !selectedSize
-                    ? 'Select a Size'
-                    : selectedVariant?.stock_qty === 0
-                      ? 'Out of Stock'
-                      : 'Add to Cart'
+                {!selectedSize
+                  ? 'Select a Size'
+                  : selectedVariant?.stock_qty === 0
+                    ? 'Out of Stock'
+                    : 'Buy Now →'
                 }
               </MagneticButton>
+              <p className="text-text-muted text-xs">
+                You'll be redirected to our order form to complete your purchase.
+              </p>
             </div>
 
             {/* Product meta */}
             <div className="mt-8 pt-6 border-t border-white/5 space-y-2 text-xs text-text-muted">
-              <p>Type: <span className="text-text-secondary capitalize">{product.type}</span></p>
               <p>Category: <span className="text-text-secondary">Official HPL Merchandise</span></p>
+              <p>Sizes available: <span className="text-text-secondary">S · M · L · XL · XXL · 2XL · 3XL</span></p>
             </div>
           </motion.div>
         </div>

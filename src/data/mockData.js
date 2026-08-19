@@ -13,7 +13,8 @@ export const TEAMS = [
 ];
 
 const PRODUCT_TYPES = ['jersey'];
-const SIZES = ['S', 'M', 'L', 'XL', 'XXL'];
+const SIZES = ['S', 'M', 'L', 'XL', 'XXL', '2XL', '3XL'];
+
 
 // Price in paise
 const PRICES = {
@@ -75,7 +76,7 @@ export const PRODUCT_VARIANTS = PRODUCTS.flatMap((product) =>
     id: String(variantId++),
     product_id: product.id,
     size,
-    stock_qty: size === 'XXL' ? 0 : Math.floor(Math.random() * 20) + 5, // XXL out of stock for demo
+    stock_qty: Math.floor(Math.random() * 20) + 5,
   }))
 );
 

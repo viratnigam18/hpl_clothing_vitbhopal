@@ -5,8 +5,6 @@ import Home from '@/pages/Home';
 import Shop from '@/pages/Shop';
 import TeamPage from '@/pages/TeamPage';
 import ProductPage from '@/pages/ProductPage';
-import Cart from '@/pages/Cart';
-import OrderConfirmation from '@/pages/OrderConfirmation';
 import About from '@/pages/About';
 
 function AnimatedRoutes() {
@@ -20,8 +18,6 @@ function AnimatedRoutes() {
           <Route path="shop" element={<Shop />} />
           <Route path="teams/:slug" element={<TeamPage />} />
           <Route path="products/:slug" element={<ProductPage />} />
-          <Route path="cart" element={<Cart />} />
-          <Route path="order/:orderNumber" element={<OrderConfirmation />} />
           <Route path="about" element={<About />} />
         </Route>
       </Routes>

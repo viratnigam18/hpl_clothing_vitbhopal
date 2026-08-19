@@ -2,18 +2,17 @@ import { useRef, useState } from 'react';
 import { motion, useMotionValue, useSpring } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
-import { useCartStore } from '@/store/cartStore';
 import { formatPrice } from '@/data/mockData';
 
+const BUY_NOW_FORM = 'https://forms.gle/LnowDts9HkYSLohg7';
+
 /**
- * ProductCard — 3D tilt on mouse move, hover lift, add-to-cart with fly animation.
+ * ProductCard — 3D tilt on mouse move, hover lift, Buy Now opens Google Form.
  */
 export default function ProductCard({ product, index = 0 }) {
   const prefersReduced = useReducedMotion();
   const navigate = useNavigate();
   const cardRef = useRef(null);
-  const addItem = useCartStore((state) => state.addItem);
-  const [justAdded, setJustAdded] = useState(false);
 
   const rotateX = useMotionValue(0);
   const rotateY = useMotionValue(0);
@@ -36,23 +35,14 @@ export default function ProductCard({ product, index = 0 }) {
     rotateY.set(0);
   };
 
-  const handleAddToCart = (e) => {
+  const handleBuyNow = (e) => {
     e.stopPropagation();
-    const defaultVariant = product.variants?.find((v) => v.stock_qty > 0);
-    if (!defaultVariant) return;
-
-    addItem({
-      productId: product.id,
-      variantId: defaultVariant.id,
-      name: product.name,
-      size: defaultVariant.size,
-      price: product.price,
-      qty: 1,
-      image: product.images?.[0]?.url || '',
+    const params = new URLSearchParams({
+      'entry.product': product.name,
+      'entry.price': formatPrice(product.price),
+      'entry.team': product.team?.name || 'HPL',
     });
-
-    setJustAdded(true);
-    setTimeout(() => setJustAdded(false), 1200);
+    window.open(`${BUY_NOW_FORM}?${params.toString()}`, '_blank');
   };
 
   const teamColor = product.team?.color_hex || '#d4af37';
@@ -91,15 +81,10 @@ export default function ProductCard({ product, index = 0 }) {
             className="absolute top-3 left-3 w-3 h-3 rounded-full ring-2 ring-white/20"
             style={{ backgroundColor: teamColor }}
           />
-          {/* Badges */}
-          {product.is_new && (
-            <span className="absolute top-3 right-3 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider bg-gold text-bg rounded-full">
-              New
-            </span>
-          )}
+          {/* Bestseller badge */}
           {product.is_bestseller && (
             <span className="absolute top-3 right-3 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider bg-gold-dim text-gold-bright rounded-full">
-              Bestseller
+              Official
             </span>
           )}
         </div>
@@ -117,19 +102,14 @@ export default function ProductCard({ product, index = 0 }) {
               {formatPrice(product.price)}
             </span>
             <motion.button
-              className={`
-                px-3 py-1.5 rounded-md text-xs font-semibold uppercase tracking-wide
-                transition-colors duration-200
-                ${justAdded
-                  ? 'bg-green-600 text-white'
-                  : 'bg-white/5 text-text-secondary hover:bg-gold/20 hover:text-gold'
-                }
-              `}
+              className="px-3 py-1.5 rounded-md text-xs font-semibold uppercase tracking-wide
+                         bg-gold/10 text-gold border border-gold/20 hover:bg-gold hover:text-bg
+                         transition-all duration-200"
               whileTap={{ scale: 0.9 }}
-              onClick={handleAddToCart}
-              aria-label={`Add ${product.name} to cart`}
+              onClick={handleBuyNow}
+              aria-label={`Buy ${product.name} now`}
             >
-              {justAdded ? '✓ Added' : 'Add'}
+              Buy Now
             </motion.button>
           </div>
         </div>
