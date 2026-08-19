@@ -128,18 +128,18 @@ button {
    ============================================================ */
 @keyframes gold-shine-sweep {
   0% {
-    transform: translateX(-120%) skewX(-15deg);
+    transform: translateX(-130%) skewX(-15deg);
     opacity: 0;
   }
-  10% {
+  5% {
     opacity: 1;
   }
-  45% {
-    transform: translateX(220%) skewX(-15deg);
+  40% {
+    transform: translateX(230%) skewX(-15deg);
     opacity: 0;
   }
-  100% {
-    transform: translateX(220%) skewX(-15deg);
+  41%, 100% {
+    transform: translateX(-130%) skewX(-15deg);
     opacity: 0;
   }
 }
@@ -147,21 +147,26 @@ button {
 .gold-shine {
   position: relative;
   overflow: hidden;
+  border-radius: inherit;
+}
+.gold-shine.circle-clip {
+  clip-path: circle(50%);
 }
 .gold-shine::after {
   content: "";
   position: absolute;
-  inset: 0;
+  inset: -10px;
   background: linear-gradient(
     90deg,
     transparent 0%,
-    rgba(243, 216, 120, 0.08) 20%,
-    rgba(243, 216, 120, 0.35) 50%,
-    rgba(243, 216, 120, 0.08) 80%,
+    rgba(243, 216, 120, 0.05) 15%,
+    rgba(243, 216, 120, 0.45) 50%,
+    rgba(243, 216, 120, 0.05) 85%,
     transparent 100%
   );
-  animation: gold-shine-sweep 6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  animation: gold-shine-sweep 4s ease-in-out infinite;
   pointer-events: none;
+  z-index: 10;
 }
 
 /* ============================================================

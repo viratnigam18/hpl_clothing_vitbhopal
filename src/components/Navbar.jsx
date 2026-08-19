@@ -28,18 +28,21 @@ export default function Navbar() {
         aria-label="Main navigation"
       >
         <div className="container-hpl h-full flex items-center justify-between">
-          {/* Logo */}
+          {/* Logo + Name */}
           <Link
             to="/"
-            className="flex items-center gap-2 no-underline"
+            className="flex items-center gap-2.5 no-underline"
             id="nav-logo"
           >
             <img
               src="/images/hpl_logo.png"
               alt="HPL Logo"
-              className="h-10 w-auto object-contain"
-              style={{ maxWidth: 120 }}
+              className="h-9 w-auto object-contain"
+              style={{ maxWidth: 40 }}
             />
+            <span className="hidden sm:block font-heading text-sm tracking-widest uppercase text-text-primary">
+              HPL <span className="text-gold">Clothing</span>
+            </span>
           </Link>
 
           {/* Desktop nav links */}
