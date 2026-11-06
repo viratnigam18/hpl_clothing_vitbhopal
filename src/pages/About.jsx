@@ -84,12 +84,12 @@ export default function About() {
               For full fixtures, results, and league standings
             </p>
             <a
-              href="#"
+              href="https://www.hplvitbhopal.site"
               className="inline-flex items-center gap-2 text-gold hover:text-gold-bright transition-colors text-sm font-semibold"
               target="_blank"
               rel="noopener noreferrer"
             >
-              Visit the HPL League Site
+              Visit Official HPL Site (hplvitbhopal.site)
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6" />
                 <polyline points="15 3 21 3 21 9" />

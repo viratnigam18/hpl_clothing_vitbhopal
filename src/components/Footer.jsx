@@ -62,13 +62,13 @@ export default function Footer() {
             </span>
           </a>
 
-          {/* VIT Bhopal */}
+          {/* Official HPL Site */}
           <a
-            href="https://vitbhopal.ac.in"
+            href="https://www.hplvitbhopal.site"
             target="_blank"
             rel="noopener noreferrer"
             className="group flex items-center gap-2 text-text-secondary hover:text-gold transition-all no-underline"
-            aria-label="VIT Bhopal University"
+            aria-label="Official HPL League Website"
           >
             <span className="flex items-center justify-center w-9 h-9 rounded-xl bg-white/5 group-hover:bg-gold/10 transition-all duration-300">
               <svg
@@ -87,7 +87,7 @@ export default function Footer() {
               </svg>
             </span>
             <span className="text-xs font-medium hidden sm:block group-hover:text-gold transition-colors">
-              VIT Bhopal
+              Official HPL Site
             </span>
           </a>
         </div>
@@ -97,15 +97,20 @@ export default function Footer() {
       <div className="border-t border-white/5">
         <div className="container-hpl py-4 flex flex-col sm:flex-row items-center justify-between gap-2">
           <p className="text-text-muted text-xs">
-            © {new Date().getFullYear()} HPL · Hockey Premier League, VIT Bhopal
+            © {new Date().getFullYear()} HPL Clothing · Official Merchandise Partner
           </p>
           <a
-            href="https://vitbhopal.ac.in"
+            href="https://www.hplvitbhopal.site"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-text-muted text-xs hover:text-gold transition-colors no-underline"
+            className="text-text-muted text-xs hover:text-gold transition-colors no-underline flex items-center gap-1.5"
           >
-            vitbhopal.ac.in
+            <span>hplvitbhopal.site</span>
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6" />
+              <polyline points="15 3 21 3 21 9" />
+              <line x1="10" y1="14" x2="21" y2="3" />
+            </svg>
           </a>
         </div>
       </div>
