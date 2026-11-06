@@ -3,21 +3,23 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useProduct } from '@/hooks/useProduct';
 import { useProducts } from '@/hooks/useProducts';
-import { formatPrice } from '@/data/mockData';
+import { formatPrice, JERSEY_STYLES } from '@/data/mockData';
 import ImageGallery from '@/components/ImageGallery';
 import SizePicker from '@/components/SizePicker';
+import JerseyStylePicker from '@/components/JerseyStylePicker';
+import PaymentModal from '@/components/PaymentModal';
 import MagneticButton from '@/components/MagneticButton';
 import ProductCard from '@/components/ProductCard';
 import SectionReveal from '@/components/SectionReveal';
-
-const BUY_NOW_FORM = 'https://forms.gle/LnowDts9HkYSLohg7';
 
 export default function ProductPage() {
   const { slug } = useParams();
   const navigate = useNavigate();
   const { product, loading } = useProduct(slug);
 
+  const [selectedStyle, setSelectedStyle] = useState('cricket');
   const [selectedSize, setSelectedSize] = useState(null);
+  const [isPaymentOpen, setIsPaymentOpen] = useState(false);
 
   // Get related products from the same team
   const teamSlug = product?.team?.slug;
@@ -43,18 +45,13 @@ export default function ProductPage() {
   }
 
   const selectedVariant = product.variants?.find((v) => v.size === selectedSize);
-  const canBuy = selectedVariant && selectedVariant.stock_qty > 0;
+  const canBuy = selectedVariant && selectedVariant.stock_qty > 0 && !!selectedStyle;
   const teamColor = product.team?.color_hex || '#d4af37';
+  const selectedStyleObj = JERSEY_STYLES.find((s) => s.id === selectedStyle) || JERSEY_STYLES[0];
 
   const handleBuyNow = () => {
     if (!canBuy) return;
-    const params = new URLSearchParams({
-      'entry.product': product.name,
-      'entry.size': selectedSize,
-      'entry.price': formatPrice(product.price),
-      'entry.team': product.team?.name || 'HPL',
-    });
-    window.open(`${BUY_NOW_FORM}?${params.toString()}`, '_blank');
+    setIsPaymentOpen(true);
   };
 
   return (
@@ -87,11 +84,20 @@ export default function ProductPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-16">
           {/* Left: Image Gallery */}
           <motion.div
+            className="relative"
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <ImageGallery images={product.images || []} />
+            <div className="relative">
+              <ImageGallery images={product.images || []} />
+              {selectedStyleObj && (
+                <div className="absolute top-3 left-3 pointer-events-none z-10 px-3 py-1.5 rounded-full bg-black/80 backdrop-blur-md border border-white/10 text-xs font-semibold text-text-primary flex items-center gap-2 shadow-lg">
+                  <span className="w-2 h-2 rounded-full" style={{ backgroundColor: teamColor }} />
+                  <span>{selectedStyleObj.name}</span>
+                </div>
+              )}
+            </div>
           </motion.div>
 
           {/* Right: Product Info */}
@@ -128,15 +134,42 @@ export default function ProductPage() {
             </p>
 
             {/* Description */}
-            <p className="text-text-secondary text-sm leading-relaxed mb-8">
+            <p className="text-text-secondary text-sm leading-relaxed mb-6">
               {product.description}
             </p>
 
+            {/* Style Picker (3 options: Cricket Collar, Football Without Collar, Basketball Sleeveless) */}
+            <div className="mb-6">
+              <div className="flex items-center justify-between mb-3">
+                <p className="text-text-primary text-sm font-semibold uppercase tracking-wider">
+                  Select Jersey Style
+                </p>
+                {selectedStyleObj && (
+                  <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-gold/15 text-gold border border-gold/30">
+                    {selectedStyleObj.tag}
+                  </span>
+                )}
+              </div>
+              <JerseyStylePicker
+                styles={JERSEY_STYLES}
+                selected={selectedStyle}
+                onSelect={setSelectedStyle}
+                teamColor={teamColor}
+              />
+            </div>
+
             {/* Size Picker */}
             <div className="mb-6">
-              <p className="text-text-primary text-sm font-semibold mb-3 uppercase tracking-wider">
-                Select Size
-              </p>
+              <div className="flex items-center justify-between mb-3">
+                <p className="text-text-primary text-sm font-semibold uppercase tracking-wider">
+                  Select Size
+                </p>
+                {selectedSize && (
+                  <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-gold/15 text-gold border border-gold/30">
+                    Size: {selectedSize}
+                  </span>
+                )}
+              </div>
               <SizePicker
                 variants={product.variants || []}
                 selected={selectedSize}
@@ -153,7 +186,7 @@ export default function ProductPage() {
             <div className="mt-auto flex flex-col gap-3">
               <MagneticButton
                 variant="primary"
-                className="w-full sm:w-auto"
+                className="w-full sm:w-auto text-base py-3.5"
                 onClick={handleBuyNow}
                 disabled={!canBuy}
                 id="product-buy-now"
@@ -162,21 +195,38 @@ export default function ProductPage() {
                   ? 'Select a Size'
                   : selectedVariant?.stock_qty === 0
                     ? 'Out of Stock'
-                    : 'Buy Now →'
+                    : `Buy Now — ₹400 →`
                 }
               </MagneticButton>
               <p className="text-text-muted text-xs">
-                You'll be redirected to our order form to complete your purchase.
+                {selectedStyleObj && selectedSize ? (
+                  <>
+                    Selected: <span className="text-gold font-medium">{selectedStyleObj.name}</span> in size <span className="text-gold font-medium">{selectedSize}</span>. Direct UPI Scan & Pay with automated email confirmation.
+                  </>
+                ) : (
+                  <>Instant UPI Scan & Pay (₹400) · Hostel Delivery · Email Confirmation.</>
+                )}
               </p>
             </div>
 
             {/* Product meta */}
             <div className="mt-8 pt-6 border-t border-white/5 space-y-2 text-xs text-text-muted">
               <p>Category: <span className="text-text-secondary">Official HPL Merchandise</span></p>
+              <p>Available Styles: <span className="text-text-secondary">Cricket (Collar) · Football (Without Collar) · Basketball (Sleeveless)</span></p>
+              <p>Selected Option: <span className="text-gold font-medium">{selectedStyleObj?.name}</span></p>
               <p>Sizes available: <span className="text-text-secondary">S · M · L · XL · XXL · 2XL · 3XL</span></p>
             </div>
           </motion.div>
         </div>
+
+        {/* Payment Modal */}
+        <PaymentModal
+          isOpen={isPaymentOpen}
+          onClose={() => setIsPaymentOpen(false)}
+          product={product}
+          selectedStyle={selectedStyleObj}
+          selectedSize={selectedSize}
+        />
 
         {/* ====== MORE FROM THIS TEAM ====== */}
         {moreFromTeam.length > 0 && (

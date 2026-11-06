@@ -1,10 +1,8 @@
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import { motion, useMotionValue, useSpring } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { formatPrice } from '@/data/mockData';
-
-const BUY_NOW_FORM = 'https://forms.gle/LnowDts9HkYSLohg7';
 
 /**
  * ProductCard — 3D tilt on mouse move, hover lift, Buy Now opens Google Form.
@@ -37,12 +35,7 @@ export default function ProductCard({ product, index = 0 }) {
 
   const handleBuyNow = (e) => {
     e.stopPropagation();
-    const params = new URLSearchParams({
-      'entry.product': product.name,
-      'entry.price': formatPrice(product.price),
-      'entry.team': product.team?.name || 'HPL',
-    });
-    window.open(`${BUY_NOW_FORM}?${params.toString()}`, '_blank');
+    navigate(`/products/${product.slug}`);
   };
 
   const teamColor = product.team?.color_hex || '#d4af37';
@@ -91,9 +84,12 @@ export default function ProductCard({ product, index = 0 }) {
 
         {/* Info */}
         <div className="p-4 space-y-2">
-          <p className="text-text-muted text-xs uppercase tracking-wider">
-            {product.team?.name || 'HPL'}
-          </p>
+          <div className="flex items-center justify-between">
+            <p className="text-text-muted text-xs uppercase tracking-wider">
+              {product.team?.name || 'HPL'}
+            </p>
+            <span className="text-[10px] text-gold/80 font-medium">3 Styles</span>
+          </div>
           <h3 className="text-text-primary font-semibold text-sm leading-tight truncate">
             {product.name}
           </h3>

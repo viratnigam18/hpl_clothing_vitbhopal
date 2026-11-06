@@ -1,33 +1,50 @@
-import { useParams, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { getOrderByNumber } from '@/lib/orders';
 import MagneticButton from '@/components/MagneticButton';
 import SectionReveal from '@/components/SectionReveal';
 
 export default function OrderConfirmation() {
   const { orderNumber } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const [order, setOrder] = useState(location.state?.order || null);
+
+  useEffect(() => {
+    if (!order && orderNumber) {
+      const found = getOrderByNumber(orderNumber);
+      if (found) setOrder(found);
+    }
+  }, [order, orderNumber]);
 
   // Build WhatsApp share link
+  const itemSummary = order?.items?.map((i) => `${i.productName} (${i.style}, Size ${i.size})`).join(', ') || 'Official HPL Jersey';
   const whatsappText = encodeURIComponent(
-    `🏆 Just ordered from HPL Clothing!\n\nOrder #${orderNumber}\n\nCheck out the merch: ${window.location.origin}/shop`
+    `🏆 Just ordered my HPL Official Jersey!\n\nOrder #${orderNumber}\nItem: ${itemSummary}\nAmount: ₹${order?.totalAmount || 400}\n\nCheck out HPL Clothing: ${window.location.origin}/shop`
   );
   const whatsappUrl = `https://wa.me/?text=${whatsappText}`;
 
+  const handlePrint = () => {
+    window.print();
+  };
+
   return (
-    <div className="min-h-[70vh] flex items-center justify-center py-12">
-      <div className="container-hpl max-w-lg">
+    <div className="min-h-[75vh] flex items-center justify-center py-10 sm:py-16">
+      <div className="container-hpl max-w-2xl">
         <SectionReveal>
           <div className="text-center">
             {/* Success checkmark */}
             <motion.div
-              className="w-20 h-20 rounded-full bg-green-500/10 border-2 border-green-500/30 flex items-center justify-center mx-auto mb-8"
+              className="w-20 h-20 rounded-full bg-green-500/15 border-2 border-green-500/40 flex items-center justify-center mx-auto mb-6 shadow-[0_0_30px_rgba(34,197,94,0.25)]"
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
-              transition={{ type: 'spring', stiffness: 300, damping: 20, delay: 0.2 }}
+              transition={{ type: 'spring', stiffness: 300, damping: 20, delay: 0.15 }}
             >
               <motion.svg
-                width="32"
-                height="32"
+                width="34"
+                height="34"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="#22c55e"
@@ -36,35 +53,148 @@ export default function OrderConfirmation() {
                 strokeLinejoin="round"
                 initial={{ pathLength: 0 }}
                 animate={{ pathLength: 1 }}
-                transition={{ duration: 0.5, delay: 0.5 }}
+                transition={{ duration: 0.5, delay: 0.4 }}
               >
                 <polyline points="20 6 9 17 4 12" />
               </motion.svg>
             </motion.div>
 
-            <h1 className="text-3xl sm:text-4xl text-text-primary mb-3">
-              Order <span className="text-gradient-gold">Confirmed!</span>
+            <h1 className="text-3xl sm:text-4xl text-text-primary mb-2">
+              Payment & Order <span className="text-gradient-gold">Confirmed!</span>
             </h1>
 
-            <p className="text-text-secondary mb-2">
-              Thank you for your order
+            <p className="text-text-secondary text-sm max-w-md mx-auto mb-6">
+              Thank you for ordering. Your payment verification is received and your jersey has been booked.
             </p>
 
-            <div className="inline-block px-4 py-2 rounded-lg bg-bg-card border border-gold/10 mb-8">
-              <p className="text-text-muted text-xs uppercase tracking-wider">
-                Order Number
-              </p>
-              <p className="text-gold font-heading text-xl mt-0.5">
+            {/* Order Number Badge */}
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-bg-card border border-gold/30 mb-8 shadow-sm">
+              <span className="text-text-muted text-xs uppercase tracking-wider">
+                Order Ref:
+              </span>
+              <span className="text-gold font-mono font-bold text-base sm:text-lg">
                 {orderNumber}
-              </p>
+              </span>
             </div>
 
-            <p className="text-text-secondary text-sm mb-8 max-w-md mx-auto">
-              Your order has been placed successfully. You'll receive a confirmation on WhatsApp/email shortly. Pick up your merch at the designated collection point.
-            </p>
+            {/* Order Details Receipt Card */}
+            {order && (
+              <div className="text-left p-5 sm:p-6 rounded-2xl bg-bg-card border border-white/10 shadow-xl mb-8 space-y-5">
+                {/* Header of Receipt */}
+                <div className="flex items-center justify-between pb-4 border-b border-white/10">
+                  <div>
+                    <p className="text-xs text-text-muted uppercase tracking-wider">
+                      Student / Buyer
+                    </p>
+                    <p className="font-semibold text-text-primary text-base">
+                      {order.customer?.name}
+                    </p>
+                    {order.customer?.regNo && (
+                      <p className="text-xs text-text-muted">
+                        Reg No: {order.customer.regNo}
+                      </p>
+                    )}
+                  </div>
+                  <div className="text-right">
+                    <p className="text-xs text-text-muted uppercase tracking-wider">
+                      Delivery Location
+                    </p>
+                    <p className="font-semibold text-text-primary text-sm">
+                      {order.customer?.hostelBlock}
+                    </p>
+                    <p className="text-xs text-text-muted">
+                      Room {order.customer?.roomNo}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Items Purchased */}
+                <div>
+                  <p className="text-xs font-semibold text-text-secondary uppercase tracking-wider mb-2.5">
+                    Order Items
+                  </p>
+                  <div className="space-y-2">
+                    {order.items?.map((item, idx) => (
+                      <div
+                        key={idx}
+                        className="flex items-center justify-between p-3 rounded-lg bg-bg-elevated/70 border border-white/5 text-sm"
+                      >
+                        <div>
+                          <p className="font-semibold text-text-primary">
+                            {item.productName}
+                          </p>
+                          <div className="flex items-center gap-2 text-xs text-text-muted mt-0.5">
+                            <span className="text-gold font-medium">{item.style}</span>
+                            <span>•</span>
+                            <span className="text-text-secondary font-medium">Size: {item.size}</span>
+                            <span>•</span>
+                            <span>Qty: {item.qty}</span>
+                          </div>
+                        </div>
+                        <span className="font-heading text-lg text-gold">
+                          ₹{item.price}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Payment Summary */}
+                <div className="pt-3 border-t border-white/10 space-y-2 text-xs">
+                  <div className="flex justify-between text-text-secondary">
+                    <span>Payment Method:</span>
+                    <span className="text-text-primary font-medium">
+                      UPI (Indian Bank · Hostel Events)
+                    </span>
+                  </div>
+                  {order.paymentDetails?.utrNumber && (
+                    <div className="flex justify-between text-text-secondary">
+                      <span>UPI UTR / Transaction ID:</span>
+                      <span className="font-mono text-gold font-medium">
+                        {order.paymentDetails.utrNumber}
+                      </span>
+                    </div>
+                  )}
+                  <div className="flex justify-between text-text-secondary">
+                    <span>Confirmation Email:</span>
+                    <span className="text-text-primary font-medium">
+                      {order.customer?.email}
+                    </span>
+                  </div>
+                  <div className="flex justify-between text-text-secondary">
+                    <span>WhatsApp / Contact:</span>
+                    <span className="text-text-primary font-medium">
+                      {order.customer?.phone}
+                    </span>
+                  </div>
+                  <div className="flex justify-between text-text-primary font-semibold text-sm pt-2 border-t border-white/5">
+                    <span>Total Amount Paid:</span>
+                    <span className="font-heading text-xl text-gold">
+                      ₹{order.totalAmount}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Email Automation Notice */}
+                <div className="p-3.5 rounded-xl bg-gold/10 border border-gold/30 flex items-start gap-3">
+                  <span className="text-lg">📧</span>
+                  <div className="text-xs">
+                    <p className="font-semibold text-gold">
+                      Email Confirmation Queued
+                    </p>
+                    <p className="text-text-secondary mt-0.5 leading-relaxed">
+                      Your order details have been recorded for automated email confirmation to{' '}
+                      <span className="text-text-primary font-medium underline">
+                        {order.customer?.email}
+                      </span>. Merch distribution updates will be shared via email and WhatsApp.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
 
             {/* Actions */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <MagneticButton
                 variant="primary"
                 onClick={() => window.open(whatsappUrl, '_blank')}
@@ -77,6 +207,14 @@ export default function OrderConfirmation() {
                   Share on WhatsApp
                 </span>
               </MagneticButton>
+
+              <button
+                type="button"
+                onClick={handlePrint}
+                className="px-5 py-2.5 rounded-lg border border-white/10 hover:border-gold/40 text-text-secondary hover:text-gold text-xs font-semibold uppercase tracking-wider transition-colors"
+              >
+                🖨️ Print / Save Receipt
+              </button>
 
               <MagneticButton
                 variant="secondary"

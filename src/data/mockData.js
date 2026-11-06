@@ -12,6 +12,48 @@ export const TEAMS = [
   { id: '7', name: 'Harangi Jaguars', slug: 'harangi-jaguars', color_hex: '#27AE60', crest_url: '/images/logos/jaguars.png',  sort_order: 7 },
 ];
 
+export const JERSEY_STYLES = [
+  {
+    id: 'cricket',
+    number: 1,
+    name: 'Cricket Jersey (Collar)',
+    shortName: 'Cricket (Collar)',
+    collar: 'Collar',
+    sleeves: 'Half Sleeve',
+    tag: 'Collar',
+    badge: 'Polo Collar',
+    sport: 'Cricket',
+    sportEmoji: '🏏',
+    description: 'Classic polo collar with button placket & ribbed half sleeves',
+  },
+  {
+    id: 'football',
+    number: 2,
+    name: 'Football (Without Collar)',
+    shortName: 'Football (No Collar)',
+    collar: 'Without Collar',
+    sleeves: 'Half Sleeve',
+    tag: 'Without Collar',
+    badge: 'Round Neck',
+    sport: 'Football',
+    sportEmoji: '⚽',
+    description: 'Collarless crew neck engineered for speed & match mobility',
+  },
+  {
+    id: 'basketball',
+    number: 3,
+    name: 'Basketball (Sleeveless)',
+    shortName: 'Basketball (Sleeveless)',
+    collar: 'Without Collar',
+    sleeves: 'Sleeveless',
+    tag: 'Sleeveless',
+    badge: 'Sleeveless Cut',
+    sport: 'Basketball',
+    sportEmoji: '🏀',
+    description: 'Athletic scoop neck vest cut for maximum court mobility',
+  },
+];
+
 
 const PRODUCT_TYPES = ['jersey'];
 const SIZES = ['S', 'M', 'L', 'XL', 'XXL', '2XL', '3XL'];

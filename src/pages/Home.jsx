@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useProducts } from '@/hooks/useProducts';
 import GoldShine from '@/components/GoldShine';
+
 import ProductCard from '@/components/ProductCard';
 import SectionReveal from '@/components/SectionReveal';
 import MagneticButton from '@/components/MagneticButton';
@@ -30,8 +31,8 @@ export default function Home() {
         />
 
         <div className="relative z-10 flex flex-col items-center text-center max-w-3xl mx-auto">
-          {/* Logo with circular GoldShine */}
-          <div className="rounded-full mb-8">
+          {/* Logo — golden shine effect */}
+          <div className="mb-8">
             <GoldShine shape="circle" className="rounded-full">
               <motion.div
                 className="w-36 h-36 sm:w-44 sm:h-44 rounded-full border-2 border-gold/30 flex items-center justify-center bg-bg-card/80 overflow-hidden"

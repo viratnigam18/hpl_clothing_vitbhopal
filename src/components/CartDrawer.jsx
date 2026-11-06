@@ -93,6 +93,7 @@ export default function CartDrawer({ isOpen, onClose }) {
                         {item.name}
                       </p>
                       <p className="text-xs text-text-muted mt-0.5">
+                        {item.style && <span className="text-gold/90 mr-2">{item.style}</span>}
                         Size: {item.size}
                       </p>
                       <p className="text-gold font-semibold text-sm mt-1">
