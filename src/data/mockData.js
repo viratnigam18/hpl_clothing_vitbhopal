@@ -89,29 +89,75 @@ export const PRODUCTS = TEAMS.flatMap((team) =>
   })
 );
 
-// Real jersey mockup images (one per team)
+// Real jersey mockup images (front and back per team)
 const JERSEY_IMAGES = {
-  'kabini-lynx':     '/images/jerseys/kabini-lynx.png',
-  'ken-cheetahs':    '/images/jerseys/ken-cheetahs.png',
-  'shimsha-panthers':'/images/jerseys/shimsha-panthers.png',
-  'tons-tigers':     '/images/jerseys/tons-tigers.png',
-  'orsang-leopards': '/images/jerseys/orsang-leopards.png',
-  'arkavati-lions':  '/images/jerseys/arkavati-lions.png',
-  'harangi-jaguars': '/images/jerseys/harangi-jaguars.png',
+  'kabini-lynx': {
+    front: '/images/jerseys/kabini-lynx.png',
+    back: '/images/jerseys/kabini-lynx-back.jpeg',
+  },
+  'ken-cheetahs': {
+    front: '/images/jerseys/ken-cheetahs.png',
+    back: '/images/jerseys/ken-cheetahs-back.jpeg',
+  },
+  'shimsha-panthers': {
+    front: '/images/jerseys/shimsha-panthers.png',
+    back: '/images/jerseys/shimsha-panthers-back.jpeg',
+  },
+  'tons-tigers': {
+    front: '/images/jerseys/tons-tigers.png',
+    back: '/images/jerseys/tons-tigers-back.jpeg',
+  },
+  'orsang-leopards': {
+    front: '/images/jerseys/orsang-leopards.png',
+    back: '/images/jerseys/orsang-leopards-back.jpeg',
+  },
+  'arkavati-lions': {
+    front: '/images/jerseys/arkavati-lions.png',
+    back: '/images/jerseys/arkavati-lions-back.jpeg',
+  },
+  'harangi-jaguars': {
+    front: '/images/jerseys/harangi-jaguars.png',
+    back: '/images/jerseys/harangi-jaguars-back.jpeg',
+  },
 };
 
-export const PRODUCT_IMAGES = PRODUCTS.map((product) => {
-  // Use the real jersey photo for jersey-type products
+export const PRODUCT_IMAGES = PRODUCTS.flatMap((product) => {
   const isJersey = product.type === 'jersey';
-  const url = isJersey
-    ? (JERSEY_IMAGES[product.team.slug] || `https://placehold.co/600x800/${product.team.color_hex.slice(1)}/ffffff?text=${encodeURIComponent(product.name)}`)
-    : `https://placehold.co/600x800/${product.team.color_hex.slice(1)}/ffffff?text=${encodeURIComponent(product.name)}`;
-  return {
-    id: String(imageId++),
-    product_id: product.id,
-    url,
-    sort_order: 0,
-  };
+  const jerseyImg = JERSEY_IMAGES[product.team.slug];
+
+  if (isJersey && jerseyImg) {
+    const list = [
+      {
+        id: String(imageId++),
+        product_id: product.id,
+        url: jerseyImg.front,
+        label: 'Front View',
+        sort_order: 0,
+      },
+    ];
+
+    if (jerseyImg.back) {
+      list.push({
+        id: String(imageId++),
+        product_id: product.id,
+        url: jerseyImg.back,
+        label: 'Back View',
+        sort_order: 1,
+      });
+    }
+
+    return list;
+  }
+
+  return [
+    {
+      id: String(imageId++),
+      product_id: product.id,
+      url: `https://placehold.co/600x800/${product.team.color_hex.slice(1)}/ffffff?text=${encodeURIComponent(product.name)}`,
+      label: 'Front View',
+      sort_order: 0,
+    },
+  ];
 });
 
 export const PRODUCT_VARIANTS = PRODUCTS.flatMap((product) =>

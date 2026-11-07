@@ -39,7 +39,8 @@ export default function ProductCard({ product, index = 0 }) {
   };
 
   const teamColor = product.team?.color_hex || '#d4af37';
-  const image = product.images?.[0]?.url || `https://placehold.co/600x800/1a1a18/d4af37?text=${encodeURIComponent(product.name)}`;
+  const frontImage = product.images?.[0]?.url || `https://placehold.co/600x800/1a1a18/d4af37?text=${encodeURIComponent(product.name)}`;
+  const backImage = product.images?.[1]?.url;
 
   return (
     <motion.div
@@ -64,20 +65,36 @@ export default function ProductCard({ product, index = 0 }) {
         {/* Image */}
         <div className="relative aspect-[3/4] overflow-hidden bg-bg-elevated">
           <img
-            src={image}
-            alt={product.name}
+            src={frontImage}
+            alt={`${product.name} Front`}
             loading="lazy"
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+            className={`w-full h-full object-cover transition-all duration-500 ${
+              backImage ? 'group-hover:opacity-0 scale-100 group-hover:scale-105' : 'group-hover:scale-105'
+            }`}
           />
+          {backImage && (
+            <img
+              src={backImage}
+              alt={`${product.name} Back`}
+              loading="lazy"
+              className="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-all duration-500 scale-100 group-hover:scale-105"
+            />
+          )}
           {/* Team color pip */}
           <div
-            className="absolute top-3 left-3 w-3 h-3 rounded-full ring-2 ring-white/20"
+            className="absolute top-3 left-3 w-3 h-3 rounded-full ring-2 ring-white/20 z-10"
             style={{ backgroundColor: teamColor }}
           />
           {/* Bestseller badge */}
           {product.is_bestseller && (
-            <span className="absolute top-3 right-3 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider bg-gold-dim text-gold-bright rounded-full">
+            <span className="absolute top-3 right-3 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider bg-gold-dim text-gold-bright rounded-full z-10">
               Official
+            </span>
+          )}
+          {/* Back view indicator on hover */}
+          {backImage && (
+            <span className="absolute bottom-2.5 right-2.5 px-2 py-0.5 text-[10px] font-semibold tracking-wider uppercase bg-black/75 backdrop-blur-sm text-gold border border-gold/30 rounded z-10 opacity-0 group-hover:opacity-100 transition-opacity">
+              Back View
             </span>
           )}
         </div>

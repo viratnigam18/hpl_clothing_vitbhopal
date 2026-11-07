@@ -1,7 +1,8 @@
-import { useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useProducts } from '@/hooks/useProducts';
+import { useReducedMotion } from '@/hooks/useReducedMotion';
 import GoldShine from '@/components/GoldShine';
 
 import ProductCard from '@/components/ProductCard';
@@ -11,13 +12,82 @@ import MagneticButton from '@/components/MagneticButton';
 export default function Home() {
   const navigate = useNavigate();
   const { products: bestsellers } = useProducts();
-  const scrollRef = useRef(null);
+  const prefersReduced = useReducedMotion();
+
+  const [isPaused, setIsPaused] = useState(false);
+  const [manualOffset, setManualOffset] = useState(0);
+  const [isManualMoving, setIsManualMoving] = useState(false);
+  const resumeTimerRef = useRef(null);
+  const touchStartXRef = useRef(0);
 
   const bestsellerProducts = bestsellers.filter((p) => p.is_bestseller);
 
+  useEffect(() => {
+    return () => {
+      if (resumeTimerRef.current) {
+        clearTimeout(resumeTimerRef.current);
+      }
+    };
+  }, []);
+
   const scroll = (dir) => {
-    if (!scrollRef.current) return;
-    scrollRef.current.scrollBy({ left: dir * 300, behavior: 'smooth' });
+    // dir === -1: Left arrow -> move cards to the right
+    // dir === 1: Right arrow -> move cards to the left
+    const cardStep = typeof window !== 'undefined' && window.innerWidth < 640 ? 280 : 300;
+    const setWidth = (bestsellerProducts.length || 7) * cardStep;
+
+    setIsPaused(true);
+    setIsManualMoving(true);
+
+    setManualOffset((prev) => {
+      const next = prev - dir * cardStep;
+      // Wrap within buffer bounds so cards never run out
+      if (next < -setWidth) return next + setWidth;
+      if (next > setWidth) return next - setWidth;
+      return next;
+    });
+
+    if (resumeTimerRef.current) {
+      clearTimeout(resumeTimerRef.current);
+    }
+    resumeTimerRef.current = setTimeout(() => {
+      setIsPaused(false);
+      setIsManualMoving(false);
+    }, 2000);
+  };
+
+  const handleMouseEnter = () => {
+    setIsPaused(true);
+  };
+
+  const handleMouseLeave = () => {
+    if (!isManualMoving) {
+      setIsPaused(false);
+    }
+  };
+
+  const handleTouchStart = (e) => {
+    touchStartXRef.current = e.touches[0].clientX;
+    setIsPaused(true);
+  };
+
+  const handleTouchEnd = (e) => {
+    const touchEndX = e.changedTouches[0].clientX;
+    const diff = touchEndX - touchStartXRef.current;
+
+    // Swipe threshold 40px
+    if (Math.abs(diff) > 40) {
+      if (diff < 0) {
+        scroll(1); // Swiped left -> advance cards
+      } else {
+        scroll(-1); // Swiped right -> go back
+      }
+    } else {
+      if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current);
+      resumeTimerRef.current = setTimeout(() => {
+        setIsPaused(false);
+      }, 2000);
+    }
   };
 
   return (
@@ -115,14 +185,48 @@ export default function Home() {
               </div>
 
               <div
-                ref={scrollRef}
-                className="flex gap-5 overflow-x-auto pb-4 hide-scrollbar snap-x snap-mandatory"
+                className="hpl-marquee-container overflow-hidden pb-4 select-none"
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
+                onTouchStart={handleTouchStart}
+                onTouchEnd={handleTouchEnd}
               >
-                {bestsellerProducts.map((product, i) => (
-                  <div key={product.id} className="flex-shrink-0 w-[260px] sm:w-[280px] snap-start">
-                    <ProductCard product={product} index={i} />
+                {/* Manual offset layer for smooth arrow and swipe movement */}
+                <div
+                  style={{
+                    transform: `translateX(${manualOffset}px)`,
+                    transition: isManualMoving
+                      ? 'transform 0.45s cubic-bezier(0.16, 1, 0.3, 1)'
+                      : 'none',
+                    willChange: 'transform',
+                  }}
+                >
+                  {/* Continuous infinite marquee ticker layer */}
+                  <div
+                    className={`hpl-marquee-track ${isPaused ? 'is-paused' : ''}`}
+                    style={{
+                      animationPlayState: isPaused ? 'paused' : 'running',
+                      animationName: prefersReduced ? 'none' : undefined,
+                    }}
+                  >
+                    {[0, 1, 2, 3].map((groupIndex) => (
+                      <div
+                        key={`marquee-group-${groupIndex}`}
+                        className="flex shrink-0 gap-5 pr-5"
+                        aria-hidden={groupIndex > 0 ? 'true' : undefined}
+                      >
+                        {bestsellerProducts.map((product, i) => (
+                          <div
+                            key={`${product.id}-g${groupIndex}`}
+                            className="flex-shrink-0 w-[260px] sm:w-[280px]"
+                          >
+                            <ProductCard product={product} index={i} />
+                          </div>
+                        ))}
+                      </div>
+                    ))}
                   </div>
-                ))}
+                </div>
               </div>
             </div>
           </section>

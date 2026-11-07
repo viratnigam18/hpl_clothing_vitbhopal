@@ -306,3 +306,38 @@ button {
 .hide-scrollbar::-webkit-scrollbar {
   display: none;
 }
+
+/* ============================================================
+   BEST SELLERS CONTINUOUS MARQUEE / TICKER
+   ============================================================ */
+@keyframes hpl-bestseller-marquee {
+  0% {
+    transform: translateX(-25%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.hpl-marquee-track {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+  animation: hpl-bestseller-marquee 50s linear infinite;
+}
+
+.hpl-marquee-track.is-paused {
+  animation-play-state: paused !important;
+}
+
+@media (hover: hover) {
+  .hpl-marquee-container:hover .hpl-marquee-track {
+    animation-play-state: paused;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hpl-marquee-track {
+    animation: none !important;
+  }
+}
