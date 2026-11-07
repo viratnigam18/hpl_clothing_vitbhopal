@@ -73,8 +73,6 @@ export default function JerseyRack({ products = [], onProductClick }) {
       // Find the closest rotation to avoid going the long way around
       const current = rawAngle.get();
       const diff = targetAngle - (current % 360);
-      const shortDiff =
-        ((diff + 180) % 360) - 180 + (diff > 0 && diff % 360 === 0 ? 0 : 0);
       rawAngle.set(current + (((diff + 180) % 360) - 180));
     },
     [angleStep, rawAngle]
@@ -295,7 +293,7 @@ export default function JerseyRack({ products = [], onProductClick }) {
 /**
  * Individual item on the rack — positioned around the circle.
  */
-function RackItem({ product, index, total, angleStep, radius, angle, isCentered, onClick }) {
+function RackItem({ product, index, angleStep, radius, angle, isCentered, onClick }) {
   const itemAngle = index * angleStep;
 
   // Calculate opacity and scale based on angular distance from front
