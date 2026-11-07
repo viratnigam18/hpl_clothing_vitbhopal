@@ -93,19 +93,19 @@ export default function Home() {
   return (
     <div>
       {/* ====== HERO ====== */}
-      <section className="relative min-h-[90vh] flex flex-col items-center justify-center px-4 overflow-hidden">
+      <section className="relative min-h-[82vh] sm:min-h-[90vh] flex flex-col items-center justify-start sm:justify-center pt-8 sm:pt-0 pb-12 sm:pb-0 px-4 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-bg via-bg-card/50 to-bg" />
         <div
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full opacity-20 pointer-events-none"
-          style={{ background: 'radial-gradient(circle, rgba(212,175,55,0.15) 0%, transparent 70%)' }}
+          className="absolute top-[32%] sm:top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[480px] sm:w-[600px] h-[480px] sm:h-[600px] rounded-full opacity-20 pointer-events-none"
+          style={{ background: 'radial-gradient(circle, rgba(212,175,55,0.18) 0%, transparent 70%)' }}
         />
 
         <div className="relative z-10 flex flex-col items-center text-center max-w-3xl mx-auto">
           {/* Logo — golden shine effect */}
-          <div className="mb-8">
-            <GoldShine shape="circle" className="rounded-full">
+          <div className="mb-6 sm:mb-8">
+            <GoldShine shape="circle" className="rounded-full inline-flex">
               <motion.div
-                className="w-36 h-36 sm:w-44 sm:h-44 rounded-full border-2 border-gold/30 flex items-center justify-center bg-bg-card/80 overflow-hidden"
+                className="w-44 h-44 sm:w-44 sm:h-44 rounded-full border-2 border-gold/40 flex items-center justify-center bg-bg-card/90 overflow-hidden shadow-[0_0_30px_rgba(212,175,55,0.2)]"
                 initial={{ opacity: 0, scale: 0.7 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
@@ -113,7 +113,7 @@ export default function Home() {
                 <img
                   src="/images/hpl_logo.png"
                   alt="HPL Logo"
-                  className="w-full h-full object-contain p-3"
+                  className="w-full h-full object-contain p-2 sm:p-3 translate-x-[3%]"
                   draggable={false}
                 />
               </motion.div>
@@ -121,7 +121,7 @@ export default function Home() {
           </div>
 
           <motion.h1
-            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-text-primary mb-4"
+            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-text-primary mb-3 sm:mb-4"
             initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.2 }}
           >
@@ -130,7 +130,7 @@ export default function Home() {
           </motion.h1>
 
           <motion.p
-            className="text-text-secondary text-base sm:text-lg max-w-lg mb-8"
+            className="text-text-secondary text-sm sm:text-lg max-w-lg mb-6 sm:mb-8"
             initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.4 }}
           >
@@ -138,7 +138,7 @@ export default function Home() {
           </motion.p>
 
           <motion.div
-            className="flex flex-col sm:flex-row gap-3"
+            className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto px-6 sm:px-0"
             initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.6 }}
           >
