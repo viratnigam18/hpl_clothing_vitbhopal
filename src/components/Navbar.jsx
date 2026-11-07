@@ -72,19 +72,21 @@ export default function Navbar() {
               </Link>
             ))}
 
-            {/* Teams Wardrobe trigger */}
+            {/* Wardrobe trigger */}
             <button
               className="relative text-sm uppercase tracking-wider font-medium
                          text-text-secondary hover:text-gold transition-colors duration-200
                          flex items-center gap-1.5"
               onClick={() => setWardrobeOpen(true)}
-              id="nav-teams"
+              id="nav-wardrobe"
             >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-                <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
-                <polyline points="9 22 9 12 15 12 15 22" />
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 2a3 3 0 0 0-3 3c0 .7.3 1.3.7 1.8L2 15a2 2 0 0 0 1.2 2.6c.3.1.5.1.8.1h16a2 2 0 0 0 2-2c0-.3 0-.5-.1-.8l-7.7-8.2c.4-.5.7-1.1.7-1.8a3 3 0 0 0-3-3z" />
               </svg>
-              Teams
+              <span>Wardrobe</span>
+              <span className="text-[9px] font-bold uppercase px-1.5 py-0.5 rounded-full bg-gold/15 text-gold border border-gold/30 tracking-tight leading-none">
+                Soon
+              </span>
             </button>
 
             {/* Official HPL Site Link */}
@@ -163,15 +165,18 @@ export default function Navbar() {
                 </Link>
               ))}
 
-              {/* Teams button in mobile drawer */}
+              {/* Wardrobe button in mobile drawer */}
               <button
-                className="text-lg uppercase tracking-wider font-heading text-text-secondary hover:text-gold transition-colors text-left"
+                className="text-lg uppercase tracking-wider font-heading text-text-secondary hover:text-gold transition-colors text-left flex items-center justify-between"
                 onClick={() => {
                   setMobileOpen(false);
                   setWardrobeOpen(true);
                 }}
               >
-                Teams
+                <span>Wardrobe</span>
+                <span className="text-[10px] font-sans font-bold px-2 py-0.5 rounded-full bg-gold/20 text-gold border border-gold/30">
+                  Coming Soon
+                </span>
               </button>
 
               {/* Official HPL Site Link */}
