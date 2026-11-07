@@ -30,6 +30,7 @@ export default function PaymentModal({
   const [screenshotPreview, setScreenshotPreview] = useState(null);
   const [copiedField, setCopiedField] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [termsAccepted, setTermsAccepted] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
 
   if (!isOpen) return null;
@@ -92,6 +93,11 @@ export default function PaymentModal({
       return;
     }
 
+    if (!termsAccepted) {
+      setErrorMsg('Please accept the Terms & Conditions: No Refund/Return policy and 7–10 days delivery timeline.');
+      return;
+    }
+
     setIsSubmitting(true);
     setErrorMsg('');
 
@@ -146,7 +152,7 @@ export default function PaymentModal({
 
         {/* Modal Window */}
         <motion.div
-          className="relative w-full max-w-xl bg-bg-card border border-gold/25 rounded-2xl shadow-2xl overflow-hidden z-10 my-auto flex flex-col max-h-[92vh]"
+          className="relative w-full max-w-xl md:max-w-3xl lg:max-w-4xl bg-bg-card border border-gold/30 rounded-2xl sm:rounded-3xl shadow-2xl overflow-hidden z-10 my-auto flex flex-col max-h-[92vh]"
           initial={{ opacity: 0, scale: 0.94, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.94, y: 20 }}
@@ -311,7 +317,21 @@ export default function PaymentModal({
                   </div>
                 </div>
 
-                <div className="pt-3">
+                {/* Terms and Delivery Notice */}
+                <div className="p-3 rounded-xl bg-gold/10 border border-gold/25 text-xs space-y-1">
+                  <div className="flex items-center gap-1.5 text-gold font-bold uppercase tracking-wider text-[11px]">
+                    <span>⚠️</span>
+                    <span>Terms & Delivery Notice</span>
+                  </div>
+                  <p className="text-text-secondary text-[11px] leading-relaxed">
+                    • <strong className="text-text-primary">No Refund & Return Policy:</strong> Custom printed jerseys cannot be refunded, cancelled, or returned once placed.
+                  </p>
+                  <p className="text-text-secondary text-[11px] leading-relaxed">
+                    • <strong className="text-text-primary">Delivery Timeline:</strong> It takes <strong className="text-gold">at least 7–10 days</strong> to verify your payment and deliver it to your hostel room.
+                  </p>
+                </div>
+
+                <div className="pt-2">
                   <MagneticButton
                     variant="primary"
                     className="w-full"
@@ -326,163 +346,208 @@ export default function PaymentModal({
             {/* STEP 2: PAYMENT WITH QR & UPI */}
             {step === 'payment' && (
               <form onSubmit={handleSubmitOrder} className="space-y-5">
-                {/* QR Section */}
-                <div className="flex flex-col items-center p-4 sm:p-5 rounded-xl bg-bg-elevated border border-gold/20 text-center">
-                  <div className="flex items-center justify-center gap-2 mb-2">
-                    <span className="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse" />
-                    <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">
-                      Indian Bank · Scan & Pay
-                    </span>
-                  </div>
-
-                  {/* QR Image */}
-                  <div className="w-52 h-52 sm:w-60 sm:h-60 rounded-xl overflow-hidden bg-white p-2 border-2 border-gold/40 shadow-[0_0_25px_rgba(212,175,55,0.2)] mb-3">
-                    <img
-                      src={PAYMENT_CONFIG.qrImageUrl}
-                      alt="Hostel Events UPI QR Code"
-                      className="w-full h-full object-contain"
-                    />
-                  </div>
-
-                  <p className="text-xs text-text-muted mb-3">
-                    Scan with <span className="text-text-primary font-medium">GPay, PhonePe, Paytm, BHIM</span> or any UPI app.
-                  </p>
-
-                  {/* Mobile Direct Pay Button */}
-                  <a
-                    href={upiIntentUrl}
-                    className="sm:hidden w-full py-2.5 px-4 rounded-lg bg-gold text-bg font-semibold text-xs uppercase tracking-wider text-center mb-3 shadow hover:bg-gold-bright transition-colors"
-                  >
-                    ⚡ Open in UPI App (Pay ₹{PAYMENT_CONFIG.jerseyPrice})
-                  </a>
-
-                  {/* Copy UPI ID */}
-                  <div className="w-full flex items-center justify-between p-2.5 rounded-lg bg-black/40 border border-white/10 text-xs">
-                    <div className="text-left">
-                      <span className="text-[10px] text-text-muted uppercase tracking-wider block">
-                        UPI ID
-                      </span>
-                      <span className="font-mono font-semibold text-gold">
-                        {PAYMENT_CONFIG.upiId}
-                      </span>
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() => handleCopy(PAYMENT_CONFIG.upiId, 'upiId')}
-                      className="px-3 py-1 rounded bg-white/10 hover:bg-gold hover:text-bg text-text-primary text-[11px] font-medium transition-all"
-                    >
-                      {copiedField === 'upiId' ? '✓ Copied!' : 'Copy UPI'}
-                    </button>
-                  </div>
-                </div>
-
-                {/* Bank Account Details Dropdown/Card */}
-                <div className="p-3.5 rounded-xl bg-bg-elevated border border-white/5 space-y-2 text-xs">
-                  <div className="flex items-center justify-between">
-                    <span className="font-semibold text-text-primary uppercase tracking-wider text-[11px]">
-                      Direct Bank Transfer Details
-                    </span>
-                    <span className="text-[10px] text-text-muted">Indian Bank</span>
-                  </div>
-                  <div className="grid grid-cols-2 gap-2 text-text-secondary pt-1">
-                    <div>
-                      <span className="text-[10px] text-text-muted block">Account Holder</span>
-                      <span className="font-medium text-text-primary">{PAYMENT_CONFIG.accountHolder}</span>
-                    </div>
-                    <div>
-                      <span className="text-[10px] text-text-muted block">Bank Name</span>
-                      <span className="font-medium text-text-primary">{PAYMENT_CONFIG.bankName}</span>
-                    </div>
-                    <div>
-                      <span className="text-[10px] text-text-muted block">Account Number</span>
-                      <div className="flex items-center gap-1.5">
-                        <span className="font-mono font-medium text-gold">{PAYMENT_CONFIG.accountNumber}</span>
-                        <button
-                          type="button"
-                          onClick={() => handleCopy(PAYMENT_CONFIG.accountNumber, 'acc')}
-                          className="text-[10px] text-text-muted hover:text-gold"
-                        >
-                          {copiedField === 'acc' ? 'Copied' : 'Copy'}
-                        </button>
+                <div className="grid grid-cols-1 md:grid-cols-12 gap-5 sm:gap-6 items-start">
+                  {/* Left Column (md: 5 cols): QR Code + Bank Details */}
+                  <div className="md:col-span-5 space-y-4">
+                    {/* QR Section */}
+                    <div className="flex flex-col items-center p-4 rounded-xl bg-bg-elevated border border-gold/20 text-center">
+                      <div className="flex items-center justify-center gap-2 mb-2">
+                        <span className="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse" />
+                        <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">
+                          Indian Bank · Scan & Pay
+                        </span>
                       </div>
-                    </div>
-                    <div>
-                      <span className="text-[10px] text-text-muted block">IFSC Code</span>
-                      <div className="flex items-center gap-1.5">
-                        <span className="font-mono font-medium text-gold">{PAYMENT_CONFIG.ifscCode}</span>
-                        <button
-                          type="button"
-                          onClick={() => handleCopy(PAYMENT_CONFIG.ifscCode, 'ifsc')}
-                          className="text-[10px] text-text-muted hover:text-gold"
-                        >
-                          {copiedField === 'ifsc' ? 'Copied' : 'Copy'}
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
 
-                {/* Verification Fields: UTR and Screenshot */}
-                <div className="space-y-3 pt-1">
-                  <div>
-                    <label className="block text-xs font-semibold text-text-primary uppercase tracking-wider mb-1">
-                      UPI UTR / Transaction Reference Number *
-                    </label>
-                    <input
-                      type="text"
-                      name="utrNumber"
-                      value={formData.utrNumber}
-                      onChange={handleInputChange}
-                      placeholder="Enter 12-digit UPI reference ID (e.g. 431289567123)"
-                      required
-                      className="w-full px-3.5 py-2.5 rounded-lg bg-bg-elevated border border-gold/40 text-text-primary text-sm font-mono focus:outline-none focus:border-gold transition-colors"
-                    />
-                    <p className="text-[10px] text-text-muted mt-1">
-                      You can find this 12-digit number in Google Pay, PhonePe, or Paytm receipt right after paying.
-                    </p>
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-semibold text-text-secondary uppercase tracking-wider mb-1">
-                      Upload Payment Screenshot (Optional)
-                    </label>
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={handleFileChange}
-                      className="w-full text-xs text-text-muted file:mr-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-white/10 file:text-gold hover:file:bg-gold hover:file:text-bg file:cursor-pointer cursor-pointer"
-                    />
-                    {screenshotPreview && (
-                      <div className="mt-2 w-20 h-20 rounded-lg overflow-hidden border border-gold/40">
+                      {/* QR Image */}
+                      <div className="w-44 h-44 sm:w-52 sm:h-52 rounded-xl overflow-hidden bg-white p-2 border-2 border-gold/40 shadow-[0_0_20px_rgba(212,175,55,0.2)] mb-2.5">
                         <img
-                          src={screenshotPreview}
-                          alt="Payment screenshot"
-                          className="w-full h-full object-cover"
+                          src={PAYMENT_CONFIG.qrImageUrl}
+                          alt="Hostel Events UPI QR Code"
+                          className="w-full h-full object-contain"
                         />
                       </div>
-                    )}
+
+                      <p className="text-[11px] text-text-muted mb-2.5">
+                        Scan with <span className="text-text-primary font-medium">GPay, PhonePe, Paytm, BHIM</span> or UPI app.
+                      </p>
+
+                      {/* Mobile Direct Pay Button */}
+                      <a
+                        href={upiIntentUrl}
+                        className="sm:hidden w-full py-2.5 px-4 rounded-lg bg-gold text-bg font-semibold text-xs uppercase tracking-wider text-center mb-2.5 shadow hover:bg-gold-bright transition-colors"
+                      >
+                        ⚡ Open in UPI App (Pay ₹{PAYMENT_CONFIG.jerseyPrice})
+                      </a>
+
+                      {/* Copy UPI ID */}
+                      <div className="w-full flex items-center justify-between p-2 rounded-lg bg-black/40 border border-white/10 text-xs">
+                        <div className="text-left">
+                          <span className="text-[9px] text-text-muted uppercase tracking-wider block">
+                            UPI ID
+                          </span>
+                          <span className="font-mono font-semibold text-gold text-[11px] sm:text-xs">
+                            {PAYMENT_CONFIG.upiId}
+                          </span>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => handleCopy(PAYMENT_CONFIG.upiId, 'upiId')}
+                          className="px-2.5 py-1 rounded bg-white/10 hover:bg-gold hover:text-bg text-text-primary text-[10px] sm:text-[11px] font-medium transition-all"
+                        >
+                          {copiedField === 'upiId' ? '✓ Copied' : 'Copy'}
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Bank Account Details */}
+                    <div className="p-3 rounded-xl bg-bg-elevated border border-white/5 space-y-1.5 text-xs">
+                      <div className="flex items-center justify-between">
+                        <span className="font-semibold text-text-primary uppercase tracking-wider text-[10px]">
+                          Direct Bank Transfer
+                        </span>
+                        <span className="text-[10px] text-text-muted">Indian Bank</span>
+                      </div>
+                      <div className="grid grid-cols-2 gap-2 text-text-secondary pt-1">
+                        <div>
+                          <span className="text-[9px] text-text-muted block">Account Holder</span>
+                          <span className="font-medium text-text-primary text-[11px] truncate block">{PAYMENT_CONFIG.accountHolder}</span>
+                        </div>
+                        <div>
+                          <span className="text-[9px] text-text-muted block">Account Number</span>
+                          <div className="flex items-center gap-1">
+                            <span className="font-mono font-medium text-gold text-[11px]">{PAYMENT_CONFIG.accountNumber}</span>
+                            <button
+                              type="button"
+                              onClick={() => handleCopy(PAYMENT_CONFIG.accountNumber, 'acc')}
+                              className="text-[9px] text-text-muted hover:text-gold"
+                            >
+                              {copiedField === 'acc' ? 'Copied' : 'Copy'}
+                            </button>
+                          </div>
+                        </div>
+                        <div className="col-span-2">
+                          <span className="text-[9px] text-text-muted block">IFSC Code</span>
+                          <div className="flex items-center gap-1.5">
+                            <span className="font-mono font-medium text-gold text-[11px]">{PAYMENT_CONFIG.ifscCode}</span>
+                            <button
+                              type="button"
+                              onClick={() => handleCopy(PAYMENT_CONFIG.ifscCode, 'ifsc')}
+                              className="text-[9px] text-text-muted hover:text-gold"
+                            >
+                              {copiedField === 'ifsc' ? 'Copied' : 'Copy'}
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                </div>
 
-                {/* Action Buttons */}
-                <div className="flex items-center gap-3 pt-3">
-                  <button
-                    type="button"
-                    onClick={() => setStep('details')}
-                    className="px-4 py-2.5 rounded-lg border border-white/10 hover:border-white/20 text-text-secondary hover:text-text-primary text-xs uppercase tracking-wider font-semibold transition-colors"
-                  >
-                    ← Back
-                  </button>
+                  {/* Right Column (md: 7 cols): Verification + Terms + Action */}
+                  <div className="md:col-span-7 space-y-4">
+                    {/* Verification Fields: UTR and Screenshot */}
+                    <div className="space-y-3">
+                      <div>
+                        <label className="block text-xs font-semibold text-text-primary uppercase tracking-wider mb-1">
+                          UPI UTR / Transaction Reference Number *
+                        </label>
+                        <input
+                          type="text"
+                          name="utrNumber"
+                          value={formData.utrNumber}
+                          onChange={handleInputChange}
+                          placeholder="Enter 12-digit UPI reference ID (e.g. 431289567123)"
+                          required
+                          className="w-full px-3.5 py-2.5 rounded-lg bg-bg-elevated border border-gold/40 text-text-primary text-sm font-mono focus:outline-none focus:border-gold transition-colors"
+                        />
+                        <p className="text-[10px] text-text-muted mt-1">
+                          Find this 12-digit number in Google Pay, PhonePe, or Paytm receipt right after paying.
+                        </p>
+                      </div>
 
-                  <div className="flex-1">
-                    <MagneticButton
-                      variant="primary"
-                      className="w-full"
-                      type="submit"
-                      disabled={isSubmitting}
-                    >
-                      {isSubmitting ? 'Confirming Order...' : 'Confirm & Place Order →'}
-                    </MagneticButton>
+                      <div>
+                        <label className="block text-xs font-semibold text-text-secondary uppercase tracking-wider mb-1">
+                          Upload Payment Screenshot (Optional)
+                        </label>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={handleFileChange}
+                          className="w-full text-xs text-text-muted file:mr-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-white/10 file:text-gold hover:file:bg-gold hover:file:text-bg file:cursor-pointer cursor-pointer"
+                        />
+                        {screenshotPreview && (
+                          <div className="mt-2 w-16 h-16 sm:w-20 sm:h-20 rounded-lg overflow-hidden border border-gold/40">
+                            <img
+                              src={screenshotPreview}
+                              alt="Payment screenshot"
+                              className="w-full h-full object-cover"
+                            />
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Terms and Conditions & Delivery Disclaimer */}
+                    <div className="p-3.5 rounded-xl bg-gold/10 border border-gold/30 space-y-2 text-xs">
+                      <div className="flex items-center gap-1.5 text-gold font-bold uppercase tracking-wider text-[11px]">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                          <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+                          <line x1="12" y1="9" x2="12" y2="13" />
+                          <line x1="12" y1="17" x2="12.01" y2="17" />
+                        </svg>
+                        <span>Terms & Conditions / Disclaimer</span>
+                      </div>
+                      <ul className="space-y-1 text-text-secondary text-[11px] leading-relaxed">
+                        <li className="flex items-start gap-1.5">
+                          <span className="text-gold font-bold">•</span>
+                          <span>
+                            <strong className="text-text-primary">No Refund & Return Policy:</strong> Every jersey is customized and made to order. Strictly <strong className="text-text-primary">no refunds, cancellations, or returns</strong> once submitted.
+                          </span>
+                        </li>
+                        <li className="flex items-start gap-1.5">
+                          <span className="text-gold font-bold">•</span>
+                          <span>
+                            <strong className="text-text-primary">Delivery Timeline:</strong> Takes <strong className="text-gold font-bold">at least 7–10 days</strong> to verify your UPI payment and deliver to your hostel room.
+                          </span>
+                        </li>
+                      </ul>
+
+                      <label className="flex items-start gap-2.5 pt-2 border-t border-gold/20 cursor-pointer select-none">
+                        <input
+                          type="checkbox"
+                          checked={termsAccepted}
+                          onChange={(e) => {
+                            setTermsAccepted(e.target.checked);
+                            if (errorMsg) setErrorMsg('');
+                          }}
+                          className="mt-0.5 w-4 h-4 rounded border-gold/40 bg-bg text-gold focus:ring-gold accent-[#d4af37]"
+                        />
+                        <span className="text-[11px] text-text-primary font-medium">
+                          I agree to the <strong className="text-gold">No Refund/Return</strong> policy and acknowledge delivery takes <strong className="text-gold">at least 7–10 days</strong>.
+                        </span>
+                      </label>
+                    </div>
+
+                    {/* Action Buttons */}
+                    <div className="flex items-center gap-3 pt-1">
+                      <button
+                        type="button"
+                        onClick={() => setStep('details')}
+                        className="px-4 py-3 rounded-lg border border-white/10 hover:border-white/20 text-text-secondary hover:text-text-primary text-xs uppercase tracking-wider font-semibold transition-colors"
+                      >
+                        ← Back
+                      </button>
+
+                      <div className="flex-1">
+                        <MagneticButton
+                          variant="primary"
+                          className="w-full text-sm sm:text-base py-3"
+                          type="submit"
+                          disabled={isSubmitting}
+                        >
+                          {isSubmitting ? 'Confirming Order...' : 'Confirm & Place Order →'}
+                        </MagneticButton>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </form>

@@ -207,6 +207,20 @@ export default function ProductPage() {
                   <>Instant UPI Scan & Pay (₹400) · Hostel Delivery · Email Confirmation.</>
                 )}
               </p>
+
+              {/* Policy & Delivery Disclaimer */}
+              <div className="p-3.5 rounded-xl bg-gold/10 border border-gold/30 text-xs space-y-1.5 mt-1">
+                <div className="flex items-center gap-1.5 text-gold font-bold uppercase tracking-wider text-[11px]">
+                  <span>⚠️</span>
+                  <span>Important Terms & Delivery Policy</span>
+                </div>
+                <p className="text-text-secondary text-[11px] leading-relaxed">
+                  • <strong className="text-text-primary">No Refund & Return Policy:</strong> Every jersey is custom printed to order. No refunds, returns, or size cancellations once confirmed.
+                </p>
+                <p className="text-text-secondary text-[11px] leading-relaxed">
+                  • <strong className="text-text-primary">Delivery Timeline:</strong> Takes <strong className="text-gold font-bold">at least 7–10 days</strong> to verify your UPI payment and get it delivered directly to your hostel room.
+                </p>
+              </div>
             </div>
 
             {/* Product meta */}

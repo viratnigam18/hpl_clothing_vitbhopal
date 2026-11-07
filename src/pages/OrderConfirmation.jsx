@@ -190,6 +190,19 @@ export default function OrderConfirmation() {
                     </p>
                   </div>
                 </div>
+
+                {/* Delivery Timeline & Policy Notice */}
+                <div className="p-3.5 rounded-xl bg-bg-elevated border border-white/10 flex items-start gap-3 text-xs">
+                  <span className="text-lg">⏳</span>
+                  <div>
+                    <p className="font-semibold text-text-primary">
+                      Delivery & Fulfillment Notice
+                    </p>
+                    <p className="text-text-secondary mt-0.5 leading-relaxed text-[11px]">
+                      Your payment will be verified and your jersey sent for custom printing. Delivery takes <strong className="text-gold font-bold">at least 7–10 days</strong> to be verified and delivered to your hostel room. Orders follow our strict <strong className="text-text-primary">No Refund & No Return</strong> policy.
+                    </p>
+                  </div>
+                </div>
               </div>
             )}
 

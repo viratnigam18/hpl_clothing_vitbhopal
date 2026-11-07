@@ -447,8 +447,22 @@ function TeamSpotlightHero({ product, onBuyNow, onBackToAll }) {
               </button>
             </div>
 
+            {/* Terms and Delivery Notice */}
+            <div className="p-3 rounded-xl bg-gold/10 border border-gold/25 text-xs space-y-1">
+              <div className="flex items-center gap-1.5 text-gold font-bold uppercase tracking-wider text-[11px]">
+                <span>⚠️</span>
+                <span>Important Terms & Delivery Policy</span>
+              </div>
+              <p className="text-text-secondary text-[11px] leading-relaxed">
+                • <strong className="text-text-primary">No Refund & Return Policy:</strong> Every jersey is custom-tailored on demand. No refunds, returns, or cancellations once confirmed.
+              </p>
+              <p className="text-text-secondary text-[11px] leading-relaxed">
+                • <strong className="text-text-primary">Delivery Timeline:</strong> Takes <strong className="text-gold font-bold">at least 7–10 days</strong> to verify your payment and get it delivered directly to your hostel room.
+              </p>
+            </div>
+
             {/* Delivery & UPI Trust Notice */}
-            <div className="flex flex-wrap items-center gap-4 text-xs text-text-muted pt-2">
+            <div className="flex flex-wrap items-center gap-4 text-xs text-text-muted pt-1">
               <span className="flex items-center gap-1.5">
                 <span className="text-gold">✓</span> Indian Bank Direct UPI
               </span>
@@ -467,7 +481,8 @@ function TeamSpotlightHero({ product, onBuyNow, onBackToAll }) {
 }
 
 /**
- * Quick Buy Modal for fast checkout directly from the grid
+ * Quick Buy Modal for fast checkout directly from the grid.
+ * Fully responsive: 2-column layout on laptop/desktop, touch-friendly scrollable card on mobile.
  */
 function QuickBuyModal({ product, isOpen, onClose, onProceedToPayment }) {
   const [selectedStyleId, setSelectedStyleId] = useState('cricket');
@@ -490,111 +505,206 @@ function QuickBuyModal({ product, isOpen, onClose, onProceedToPayment }) {
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 md:p-6 bg-black/85 backdrop-blur-md overflow-y-auto">
         <motion.div
-          initial={{ opacity: 0, scale: 0.95, y: 15 }}
+          initial={{ opacity: 0, scale: 0.96, y: 15 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.95, y: 15 }}
-          className="relative w-full max-w-lg rounded-2xl bg-bg-card border border-white/15 p-6 shadow-2xl overflow-hidden"
+          exit={{ opacity: 0, scale: 0.96, y: 15 }}
+          className="relative w-full max-w-lg md:max-w-3xl lg:max-w-4xl bg-bg-card border border-gold/30 rounded-2xl sm:rounded-3xl shadow-2xl flex flex-col max-h-[92vh] overflow-hidden my-auto"
         >
-          {/* Close button */}
-          <button
-            type="button"
-            onClick={onClose}
-            className="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-text-muted hover:text-white flex items-center justify-center transition-colors"
-          >
-            ✕
-          </button>
-
-          {/* Modal Header */}
-          <div className="flex items-center gap-3 mb-5 pb-4 border-b border-white/10">
-            {team?.crest_url && (
-              <img
-                src={team.crest_url}
-                alt={team.name}
-                className="w-10 h-10 object-contain p-1 rounded-xl bg-white/5 border border-white/10"
-              />
-            )}
-            <div>
-              <p className="text-xs uppercase tracking-wider text-text-muted">Quick Buy</p>
-              <h3 className="text-lg font-bold text-text-primary">{product.name}</h3>
-            </div>
-          </div>
-
-          {/* Image & Style Preview */}
-          <div className="flex gap-4 mb-5 items-center bg-bg-elevated p-3 rounded-xl border border-white/5">
-            <div className="relative w-20 h-24 rounded-lg overflow-hidden bg-black/40 flex-shrink-0">
-              <img src={currentImage} alt="" className="w-full h-full object-cover" />
-            </div>
-            <div className="flex-1 text-xs">
-              <p className="text-text-muted mb-1">
-                Selected: <span className="text-gold font-semibold">{selectedStyleObj.name}</span>
-              </p>
-              <p className="text-text-muted mb-2">
-                Size: <span className="text-gold font-semibold">{selectedSize}</span>
-              </p>
-              <div className="flex gap-2">
-                <button
-                  type="button"
-                  onClick={() => setSelectedSide('front')}
-                  className={`px-2 py-0.5 rounded text-[10px] font-bold ${
-                    selectedSide === 'front' ? 'bg-gold text-black' : 'text-text-muted hover:text-white'
-                  }`}
+          {/* Sticky Header */}
+          <div className="flex items-center justify-between px-5 sm:px-6 py-3.5 border-b border-white/10 bg-bg-elevated/80 backdrop-blur-md flex-shrink-0 z-10">
+            <div className="flex items-center gap-3">
+              {team?.crest_url ? (
+                <div
+                  className="w-9 h-9 rounded-xl p-1 flex items-center justify-center border shadow-sm flex-shrink-0"
+                  style={{
+                    backgroundColor: `${teamColor}20`,
+                    borderColor: `${teamColor}40`,
+                  }}
                 >
-                  Front
-                </button>
-                {backImage && (
-                  <button
-                    type="button"
-                    onClick={() => setSelectedSide('back')}
-                    className={`px-2 py-0.5 rounded text-[10px] font-bold ${
-                      selectedSide === 'back' ? 'bg-gold text-black' : 'text-text-muted hover:text-white'
-                    }`}
-                  >
-                    Back
-                  </button>
-                )}
+                  <img
+                    src={team.crest_url}
+                    alt={team.name}
+                    className="w-full h-full object-contain"
+                  />
+                </div>
+              ) : (
+                <span className="w-3 h-3 rounded-full flex-shrink-0" style={{ backgroundColor: teamColor }} />
+              )}
+              <div>
+                <p className="text-[10px] sm:text-[11px] uppercase tracking-wider font-semibold text-gold">
+                  Quick Buy · Official 2026 Match Kit
+                </p>
+                <h3 className="text-base sm:text-lg font-bold text-text-primary leading-tight truncate max-w-[220px] sm:max-w-md">
+                  {product.name}
+                </h3>
               </div>
             </div>
-            <div className="text-right">
-              <p className="text-[10px] text-text-muted uppercase">Total</p>
-              <p className="text-gold font-heading text-2xl">₹400</p>
+
+            <button
+              type="button"
+              onClick={onClose}
+              className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white/5 hover:bg-white/15 text-text-muted hover:text-white flex items-center justify-center border border-white/10 transition-colors flex-shrink-0"
+              aria-label="Close dialog"
+            >
+              ✕
+            </button>
+          </div>
+
+          {/* Scrollable Body: 2 Columns on Laptop/Desktop */}
+          <div className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-7">
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-6 lg:gap-8 items-start">
+              {/* Left Column (md: 5 cols): Jersey Preview + Pricing + Policy */}
+              <div className="md:col-span-5 flex flex-col gap-3.5">
+                {/* Large Responsive Jersey Viewer */}
+                <div className="relative aspect-[3/4] w-full max-w-[220px] sm:max-w-[260px] md:max-w-none mx-auto rounded-2xl overflow-hidden bg-bg-elevated border border-white/10 shadow-lg group">
+                  <img
+                    src={currentImage}
+                    alt={`${product.name} preview`}
+                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  />
+
+                  {/* Watermark Crest */}
+                  {team?.crest_url && (
+                    <img
+                      src={team.crest_url}
+                      alt=""
+                      aria-hidden="true"
+                      className="absolute -bottom-6 -right-6 w-32 h-32 object-contain opacity-10 pointer-events-none"
+                    />
+                  )}
+
+                  {/* Front/Back View Switcher */}
+                  {backImage && (
+                    <div className="absolute bottom-3 inset-x-0 flex items-center justify-center gap-1.5 z-10">
+                      <div className="bg-black/85 backdrop-blur-md p-1 rounded-full border border-white/15 flex items-center shadow-lg">
+                        <button
+                          type="button"
+                          onClick={() => setSelectedSide('front')}
+                          className={`px-3 py-1 text-[11px] font-bold rounded-full transition-all ${
+                            selectedSide === 'front'
+                              ? 'bg-gold text-black shadow-sm'
+                              : 'text-text-muted hover:text-white'
+                          }`}
+                        >
+                          👕 Front
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setSelectedSide('back')}
+                          className={`px-3 py-1 text-[11px] font-bold rounded-full transition-all ${
+                            selectedSide === 'back'
+                              ? 'bg-gold text-black shadow-sm'
+                              : 'text-text-muted hover:text-white'
+                          }`}
+                        >
+                          🔄 Back
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Price Strip */}
+                <div className="flex items-center justify-between p-3 rounded-xl bg-bg-elevated border border-white/5">
+                  <div>
+                    <span className="text-[10px] uppercase tracking-wider text-text-muted block">Total Amount</span>
+                    <span className="text-gold font-heading text-2xl sm:text-3xl leading-none">₹400</span>
+                  </div>
+                  <div className="text-right text-[11px] text-text-muted">
+                    <span className="block text-text-secondary font-medium">All 3 Cuts</span>
+                    <span>Sizes S to 3XL</span>
+                  </div>
+                </div>
+
+                {/* Terms and Delivery Notice */}
+                <div className="p-3 rounded-xl bg-gold/10 border border-gold/25 text-xs space-y-1">
+                  <div className="flex items-center gap-1.5 text-gold font-bold uppercase tracking-wider text-[10px]">
+                    <span>⚠️</span>
+                    <span>Terms & Delivery Policy</span>
+                  </div>
+                  <p className="text-text-secondary text-[11px] leading-relaxed">
+                    • <strong className="text-text-primary">No Refund & Return:</strong> Custom printed to order. No cancellations or returns.
+                  </p>
+                  <p className="text-text-secondary text-[11px] leading-relaxed">
+                    • <strong className="text-text-primary">Delivery:</strong> Takes <strong className="text-gold font-bold">at least 7–10 days</strong> to verify and get it delivered to your hostel room.
+                  </p>
+                </div>
+              </div>
+
+              {/* Right Column (md: 7 cols): Controls & Checkout Action */}
+              <div className="md:col-span-7 flex flex-col gap-4 sm:gap-5">
+                {/* 1. Style Selection */}
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <label className="text-xs font-bold uppercase tracking-wider text-text-primary">
+                      1. Select Jersey Style
+                    </label>
+                    <span className="text-xs text-gold font-semibold">
+                      {selectedStyleObj.shortName}
+                    </span>
+                  </div>
+                  <JerseyStylePicker
+                    styles={JERSEY_STYLES}
+                    selected={selectedStyleId}
+                    onSelect={setSelectedStyleId}
+                    teamColor={teamColor}
+                  />
+                </div>
+
+                {/* 2. Size Selection */}
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <label className="text-xs font-bold uppercase tracking-wider text-text-primary">
+                      2. Select Size
+                    </label>
+                    <span className="text-xs text-gold font-semibold">
+                      Size: {selectedSize}
+                    </span>
+                  </div>
+                  <SizePicker
+                    variants={product.variants || []}
+                    selected={selectedSize}
+                    onSelect={setSelectedSize}
+                  />
+                </div>
+
+                {/* Selected Summary Pill */}
+                <div className="p-3 rounded-xl bg-bg-elevated/70 border border-white/5 text-xs flex items-center justify-between">
+                  <span className="text-text-muted">Selected Kit:</span>
+                  <span className="text-text-primary font-medium text-right">
+                    <strong className="text-gold">{selectedStyleObj.shortName}</strong> · Size <strong className="text-gold">{selectedSize}</strong>
+                  </span>
+                </div>
+
+                {/* Submit / Proceed Button */}
+                <button
+                  type="button"
+                  onClick={handleProceed}
+                  className="w-full py-3.5 sm:py-4 rounded-xl font-heading text-base sm:text-lg tracking-wider bg-gold text-black hover:bg-gold-bright hover:shadow-xl hover:shadow-gold/25 transition-all duration-200 active:scale-98 flex items-center justify-center gap-2"
+                >
+                  <span>PROCEED TO UPI PAYMENT (₹400)</span>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                    <path d="M5 12h14M12 5l7 7-7 7" />
+                  </svg>
+                </button>
+
+                {/* Trust Badges */}
+                <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] text-text-muted pt-1 border-t border-white/5">
+                  <span className="flex items-center gap-1">
+                    <span className="text-gold">✓</span> Indian Bank Direct UPI
+                  </span>
+                  <span className="flex items-center gap-1">
+                    <span className="text-gold">✓</span> Campus Hostel Delivery
+                  </span>
+                  <span className="flex items-center gap-1">
+                    <span className="text-gold">✓</span> Email Confirmation
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
-
-          {/* Style Selector */}
-          <div className="mb-4">
-            <label className="text-xs font-bold uppercase tracking-wider text-text-primary block mb-2">
-              Select Jersey Style
-            </label>
-            <JerseyStylePicker
-              styles={JERSEY_STYLES}
-              selected={selectedStyleId}
-              onSelect={setSelectedStyleId}
-              teamColor={teamColor}
-            />
-          </div>
-
-          {/* Size Selector */}
-          <div className="mb-6">
-            <label className="text-xs font-bold uppercase tracking-wider text-text-primary block mb-2">
-              Select Size
-            </label>
-            <SizePicker
-              variants={product.variants || []}
-              selected={selectedSize}
-              onSelect={setSelectedSize}
-            />
-          </div>
-
-          {/* Submit */}
-          <button
-            type="button"
-            onClick={handleProceed}
-            className="w-full py-3.5 rounded-xl font-heading text-base tracking-wider bg-gold text-black hover:bg-gold-bright transition-all shadow-lg shadow-gold/20"
-          >
-            PROCEED TO UPI PAYMENT (₹400) →
-          </button>
         </motion.div>
       </div>
     </AnimatePresence>
