@@ -84,13 +84,12 @@ function ShopCard({ product, onQuickBuy, onSelectTeam }) {
             src={frontImage}
             alt={`${product.name} Front`}
             loading="lazy"
-            className={`w-full h-full object-cover transition-all duration-500 ease-out ${
-              activeSide === 'back'
+            className={`w-full h-full object-cover transition-all duration-500 ease-out ${activeSide === 'back'
                 ? 'opacity-0 scale-105'
                 : backImage
                   ? 'group-hover:opacity-0 scale-100 group-hover:scale-105'
                   : 'scale-100 group-hover:scale-105'
-            }`}
+              }`}
           />
 
           {/* Back Image (Reveals on hover or toggle) */}
@@ -99,11 +98,10 @@ function ShopCard({ product, onQuickBuy, onSelectTeam }) {
               src={backImage}
               alt={`${product.name} Back`}
               loading="lazy"
-              className={`absolute inset-0 w-full h-full object-cover transition-all duration-500 ease-out ${
-                activeSide === 'back'
+              className={`absolute inset-0 w-full h-full object-cover transition-all duration-500 ease-out ${activeSide === 'back'
                   ? 'opacity-100 scale-105'
                   : 'opacity-0 group-hover:opacity-100 scale-100 group-hover:scale-105'
-              }`}
+                }`}
             />
           )}
 
@@ -139,9 +137,8 @@ function ShopCard({ product, onQuickBuy, onSelectTeam }) {
             >
               <button
                 type="button"
-                className={`px-2 py-1 text-[10px] font-bold rounded-full transition-all ${
-                  activeSide === 'front' ? 'bg-gold text-black shadow-sm' : 'text-text-muted hover:text-white'
-                }`}
+                className={`px-2 py-1 text-[10px] font-bold rounded-full transition-all ${activeSide === 'front' ? 'bg-gold text-black shadow-sm' : 'text-text-muted hover:text-white'
+                  }`}
                 onClick={() => setActiveSide('front')}
                 title="View Front"
               >
@@ -149,9 +146,8 @@ function ShopCard({ product, onQuickBuy, onSelectTeam }) {
               </button>
               <button
                 type="button"
-                className={`px-2 py-1 text-[10px] font-bold rounded-full transition-all ${
-                  activeSide === 'back' ? 'bg-gold text-black shadow-sm' : 'text-text-muted hover:text-white'
-                }`}
+                className={`px-2 py-1 text-[10px] font-bold rounded-full transition-all ${activeSide === 'back' ? 'bg-gold text-black shadow-sm' : 'text-text-muted hover:text-white'
+                  }`}
                 onClick={() => setActiveSide('back')}
                 title="View Back"
               >
@@ -174,9 +170,9 @@ function ShopCard({ product, onQuickBuy, onSelectTeam }) {
           <div>
             {/* Cut Options Available */}
             <div className="flex items-center justify-between text-[11px] mb-1.5">
-              <span className="text-text-muted font-medium">3 Sport Cuts</span>
+              <span className="text-text-muted font-medium">3 Jersey Cuts</span>
               <span className="text-gold/90 font-semibold tracking-wide">
-                🏏 Collar · ⚽ Crew · 🏀 Vest
+                01 Collared · 02 Round-Neck · 03 Sleeveless
               </span>
             </div>
 
@@ -344,22 +340,20 @@ function TeamSpotlightHero({ product, onBuyNow, onBackToAll }) {
                   <div className="bg-black/80 backdrop-blur-md p-1 rounded-full border border-white/15 flex items-center shadow-xl">
                     <button
                       type="button"
-                      className={`px-3 py-1 text-xs font-bold rounded-full transition-all ${
-                        selectedSide === 'front'
+                      className={`px-3 py-1 text-xs font-bold rounded-full transition-all ${selectedSide === 'front'
                           ? 'bg-gold text-black shadow-md'
                           : 'text-text-muted hover:text-white'
-                      }`}
+                        }`}
                       onClick={() => setSelectedSide('front')}
                     >
                       👕 Front View
                     </button>
                     <button
                       type="button"
-                      className={`px-3 py-1 text-xs font-bold rounded-full transition-all ${
-                        selectedSide === 'back'
+                      className={`px-3 py-1 text-xs font-bold rounded-full transition-all ${selectedSide === 'back'
                           ? 'bg-gold text-black shadow-md'
                           : 'text-text-muted hover:text-white'
-                      }`}
+                        }`}
                       onClick={() => setSelectedSide('back')}
                     >
                       🔄 Back View
@@ -582,22 +576,20 @@ function QuickBuyModal({ product, isOpen, onClose, onProceedToPayment }) {
                         <button
                           type="button"
                           onClick={() => setSelectedSide('front')}
-                          className={`px-3 py-1 text-[11px] font-bold rounded-full transition-all ${
-                            selectedSide === 'front'
+                          className={`px-3 py-1 text-[11px] font-bold rounded-full transition-all ${selectedSide === 'front'
                               ? 'bg-gold text-black shadow-sm'
                               : 'text-text-muted hover:text-white'
-                          }`}
+                            }`}
                         >
                           👕 Front
                         </button>
                         <button
                           type="button"
                           onClick={() => setSelectedSide('back')}
-                          className={`px-3 py-1 text-[11px] font-bold rounded-full transition-all ${
-                            selectedSide === 'back'
+                          className={`px-3 py-1 text-[11px] font-bold rounded-full transition-all ${selectedSide === 'back'
                               ? 'bg-gold text-black shadow-sm'
                               : 'text-text-muted hover:text-white'
-                          }`}
+                            }`}
                         >
                           🔄 Back
                         </button>
@@ -733,18 +725,33 @@ function StyleGuideSection() {
         {JERSEY_STYLES.map((style) => (
           <div
             key={style.id}
-            className="p-6 rounded-2xl bg-bg-card border border-white/5 hover:border-gold/30 transition-all duration-300 relative group"
+            className="p-6 rounded-2xl bg-bg-card border border-white/5 hover:border-gold/30 transition-all duration-300 relative group flex flex-col justify-between"
           >
-            <div className="text-3xl mb-3">{style.sportEmoji}</div>
-            <div className="flex items-center justify-between mb-2">
-              <h3 className="text-lg font-bold text-text-primary">{style.name}</h3>
-              <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-gold/10 text-gold">
-                {style.badge}
-              </span>
+            <div>
+              <div className="flex items-center justify-between mb-3">
+                <span className="text-3xl">{style.sportEmoji}</span>
+                {style.isPopular ? (
+                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-wide bg-green-500/15 text-green-400 border border-green-500/30">
+                    Popular
+                  </span>
+                ) : (
+                  <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-white/5 text-text-muted border border-white/10">
+                    {style.tag}
+                  </span>
+                )}
+              </div>
+              <div className="mb-2">
+                <span className="text-[11px] font-bold text-gold/80 block uppercase tracking-wider mb-0.5">
+                  {style.subtitle}
+                </span>
+                <h3 className="text-lg font-bold text-text-primary">
+                  {style.fullName || style.name}
+                </h3>
+              </div>
+              <p className="text-text-secondary text-xs leading-relaxed mb-4">
+                {style.description}
+              </p>
             </div>
-            <p className="text-text-secondary text-xs leading-relaxed mb-4">
-              {style.description}
-            </p>
             <div className="pt-3 border-t border-white/5 flex items-center justify-between text-[11px] text-text-muted">
               <span>Collar: <strong className="text-text-primary">{style.collar}</strong></span>
               <span>Sleeves: <strong className="text-text-primary">{style.sleeves}</strong></span>
@@ -902,10 +909,10 @@ export default function Shop() {
                   style={
                     isActive
                       ? {
-                          backgroundColor: `${teamColor}33`,
-                          borderColor: teamColor,
-                          boxShadow: `0 0 15px ${teamColor}40`,
-                        }
+                        backgroundColor: `${teamColor}33`,
+                        borderColor: teamColor,
+                        boxShadow: `0 0 15px ${teamColor}40`,
+                      }
                       : {}
                   }
                   onClick={() => setFilter('team', isActive ? '' : team.slug)}
@@ -963,18 +970,16 @@ export default function Shop() {
             <div className="flex items-center bg-bg-elevated rounded-xl p-1 border border-white/10">
               <button
                 type="button"
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
-                  viewMode === 'grid' ? 'bg-gold text-black shadow-sm' : 'text-text-muted hover:text-white'
-                }`}
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${viewMode === 'grid' ? 'bg-gold text-black shadow-sm' : 'text-text-muted hover:text-white'
+                  }`}
                 onClick={() => setViewMode('grid')}
               >
                 <span>⊞</span> Grid
               </button>
               <button
                 type="button"
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
-                  viewMode === 'spotlight' ? 'bg-gold text-black shadow-sm' : 'text-text-muted hover:text-white'
-                }`}
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${viewMode === 'spotlight' ? 'bg-gold text-black shadow-sm' : 'text-text-muted hover:text-white'
+                  }`}
                 onClick={() => setViewMode('spotlight')}
               >
                 <span>🌟</span> Spotlight

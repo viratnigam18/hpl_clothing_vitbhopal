@@ -226,8 +226,8 @@ export default function ProductPage() {
             {/* Product meta */}
             <div className="mt-8 pt-6 border-t border-white/5 space-y-2 text-xs text-text-muted">
               <p>Category: <span className="text-text-secondary">Official HPL Merchandise</span></p>
-              <p>Available Styles: <span className="text-text-secondary">Cricket (Collar) · Football (Without Collar) · Basketball (Sleeveless)</span></p>
-              <p>Selected Option: <span className="text-gold font-medium">{selectedStyleObj?.name}</span></p>
+              <p>Available Styles: <span className="text-text-secondary">01 Collared (Polo) · 02 Round-Neck (Collarless) · 03 Sleeveless</span></p>
+              <p>Selected Option: <span className="text-gold font-medium">{selectedStyleObj?.fullName || selectedStyleObj?.name}</span></p>
               <p>Sizes available: <span className="text-text-secondary">S · M · L · XL · XXL · 2XL · 3XL</span></p>
             </div>
           </motion.div>

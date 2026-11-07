@@ -77,12 +77,15 @@ export default function JerseyStylePicker({
 
   return (
     <div
-      className="flex flex-col gap-2.5"
+      className="flex flex-col gap-2.5 sm:gap-3"
       role="radiogroup"
       aria-label="Select jersey style"
     >
       {styles.map((style) => {
         const isSelected = selected === style.id;
+        const numberLabel = style.numberStr || `0${style.number}`;
+        const titleText = `${numberLabel} · ${style.name}`;
+        const subtitleText = style.subtitle || style.tag;
 
         return (
           <motion.button
@@ -95,87 +98,79 @@ export default function JerseyStylePicker({
             style={
               isSelected
                 ? {
-                    borderColor: '#d4af37',
-                    boxShadow: `0 0 24px ${teamColor}25`,
+                    borderColor: teamColor || '#d4af37',
+                    boxShadow: `0 0 22px ${teamColor}33`,
                   }
                 : {}
             }
             className={`
-              relative w-full text-left p-3.5 rounded-xl border transition-all duration-200
+              relative w-full text-left p-3.5 sm:p-4 rounded-xl border transition-all duration-200
               focus-visible:outline-2 focus-visible:outline-gold focus-visible:outline-offset-2
               ${isSelected
                 ? 'bg-gold/10 border-gold'
-                : 'bg-bg-elevated/70 border-white/10 hover:border-gold/40 hover:bg-bg-elevated text-text-secondary hover:text-text-primary'
+                : 'bg-bg-elevated/80 border-white/10 hover:border-gold/40 hover:bg-bg-elevated text-text-secondary hover:text-text-primary'
               }
             `}
           >
-            <div className="flex items-center gap-3">
-              {/* Silhouette / Icon Container */}
+            <div className="flex items-start gap-3.5">
+              {/* Silhouette Icon */}
               <div
                 className={`
-                  w-11 h-11 rounded-lg flex items-center justify-center flex-shrink-0 transition-colors
+                  w-10 h-10 sm:w-11 sm:h-11 rounded-lg flex items-center justify-center flex-shrink-0 transition-colors mt-0.5
                   ${isSelected
-                    ? 'bg-gold text-bg'
-                    : 'bg-bg text-gold/80 border border-white/5'
+                    ? 'text-gold'
+                    : 'text-text-muted hover:text-text-secondary'
                   }
                 `}
               >
-                <GarmentSilhouette type={style.id} className="w-6 h-6" />
+                <GarmentSilhouette type={style.id} className="w-7 h-7 sm:w-8 sm:h-8" />
               </div>
 
-              {/* Title & Description */}
-              <div className="flex-1 min-w-0 pr-2">
-                <div className="flex items-center gap-2 flex-wrap">
-                  <span
+              {/* Title, Subtitle & Description */}
+              <div className="flex-1 min-w-0 pr-1">
+                <div className="flex items-center justify-between gap-2 mb-0.5">
+                  <h4
                     className={`
-                      text-[10px] font-bold px-1.5 py-0.5 rounded uppercase tracking-wider
-                      ${isSelected
-                        ? 'bg-gold text-bg font-extrabold'
-                        : 'bg-white/5 text-text-muted border border-white/10'
-                      }
+                      text-sm sm:text-base font-bold tracking-wide
+                      ${isSelected ? 'text-text-primary' : 'text-text-primary/90'}
                     `}
                   >
-                    0{style.number}
-                  </span>
-                  <p
-                    className={`
-                      text-sm font-semibold leading-tight
-                      ${isSelected ? 'text-text-primary font-bold' : 'text-text-primary/90'}
-                    `}
-                  >
-                    {style.name}
-                  </p>
+                    {titleText}
+                  </h4>
+
+                  {/* Popular Badge */}
+                  {style.isPopular && (
+                    <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-wide bg-green-500/15 text-green-400 border border-green-500/30 flex-shrink-0">
+                      Popular
+                    </span>
+                  )}
                 </div>
-                <p className="text-xs text-text-muted mt-1 leading-snug">
+
+                {/* Subtitle (e.g. CLASSIC POLO STYLE, COLLARLESS DESIGN, MAXIMUM MOBILITY) */}
+                {subtitleText && (
+                  <p className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-text-muted mb-1.5">
+                    {subtitleText}
+                  </p>
+                )}
+
+                {/* Description Copy */}
+                <p className="text-xs text-text-secondary leading-relaxed">
                   {style.description}
                 </p>
               </div>
 
-              {/* Tag & Radio Indicator */}
-              <div className="flex items-center gap-2.5 flex-shrink-0">
-                <span
-                  className={`
-                    hidden sm:inline-block text-[11px] font-medium px-2 py-0.5 rounded-md border
-                    ${isSelected
-                      ? 'bg-gold/15 text-gold border-gold/40'
-                      : 'bg-white/5 text-text-muted border-white/10'
-                    }
-                  `}
-                >
-                  {style.tag}
-                </span>
-
-                {/* Radio checkmark */}
+              {/* Radio Indicator */}
+              <div className="flex items-center justify-center flex-shrink-0 pt-1">
                 <div
                   className={`
                     w-5 h-5 rounded-full flex items-center justify-center transition-all
                     ${isSelected
-                      ? 'bg-gold border-2 border-gold text-bg'
+                      ? 'bg-gold border-2 border-gold text-bg shadow-sm'
                       : 'border-2 border-white/20'
                     }
                   `}
                 >
-                  {isSelected && (
+                  {isSelected ? (
                     <svg
                       viewBox="0 0 16 16"
                       fill="none"
@@ -187,7 +182,7 @@ export default function JerseyStylePicker({
                     >
                       <polyline points="3.5 8 6.5 11 12.5 5" />
                     </svg>
-                  )}
+                  ) : null}
                 </div>
               </div>
             </div>
