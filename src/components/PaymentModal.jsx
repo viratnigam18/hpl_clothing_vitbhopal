@@ -49,13 +49,50 @@ export default function PaymentModal({
 
   const handleFileChange = (e) => {
     const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setScreenshotPreview(reader.result);
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const rawDataUrl = event.target?.result;
+      if (!rawDataUrl) return;
+
+      const img = new Image();
+      img.onload = () => {
+        try {
+          const MAX_DIM = 800;
+          let width = img.width;
+          let height = img.height;
+
+          if (width > MAX_DIM || height > MAX_DIM) {
+            if (width > height) {
+              height = Math.round((height * MAX_DIM) / width);
+              width = MAX_DIM;
+            } else {
+              width = Math.round((width * MAX_DIM) / height);
+              height = MAX_DIM;
+            }
+          }
+
+          const canvas = document.createElement('canvas');
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+
+          // Compress to lightweight JPEG (~60-90 KB base64 instead of 5-10 MB)
+          const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.8);
+          setScreenshotPreview(compressedDataUrl);
+        } catch {
+          // Fallback if canvas compression encounters an issue
+          setScreenshotPreview(rawDataUrl);
+        }
       };
-      reader.readAsDataURL(file);
-    }
+      img.onerror = () => {
+        setScreenshotPreview(rawDataUrl);
+      };
+      img.src = rawDataUrl;
+    };
+    reader.readAsDataURL(file);
   };
 
   const validateStep1 = () => {

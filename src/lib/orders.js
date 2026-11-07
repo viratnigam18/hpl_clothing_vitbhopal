@@ -89,7 +89,22 @@ export async function createOrder(orderPayload) {
     currentOrders.unshift(newOrder);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(currentOrders));
   } catch (err) {
-    console.error('Failed to store order in localStorage:', err);
+    console.warn('Failed to store order with screenshot in localStorage:', err);
+    // Safe Fallback: if localStorage is full, strip screenshotUrl so customer order data is never lost
+    try {
+      const sanitizedOrder = {
+        ...newOrder,
+        paymentDetails: {
+          ...newOrder.paymentDetails,
+          screenshotUrl: null,
+        },
+      };
+      const currentOrders = getAllOrders();
+      currentOrders.unshift(sanitizedOrder);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(currentOrders));
+    } catch (fallbackErr) {
+      console.error('LocalStorage quota completely full, could not persist locally:', fallbackErr);
+    }
   }
 
   // 2. Save to Supabase if configured
